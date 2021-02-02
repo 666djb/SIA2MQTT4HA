@@ -1,0 +1,18 @@
+mqtt:
+  brokerUrl : mqtt://ha.home.djb.org.uk
+  username: mqtt
+  password: mqtt
+  baseTopic: sia2mqtt
+  discoveryTopic: homeassistant
+
+sia:
+  port: 10002
+
+zones:
+  1021:
+    name: front_door
+    handler: door
+
+  1018:
+    name: office_pir
+    handler: pir

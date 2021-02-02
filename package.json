@@ -1,0 +1,28 @@
+{
+  "name": "typeflex",
+  "version": "1.0.0",
+  "description": "",
+  "main": "./dist/server.js",
+  "scripts": {
+    "postinstall": "tsc -p ./src",
+    "postinstallx": "ls src",
+    "start": "node ./dist/server.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/node": "^12.0.0",
+    "typescript": "^3.4.5"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/dklemm/FlexSIA2MQTT.git"
+  },
+  "dependencies": {
+    "@types/js-yaml": "^3.12.1",
+    "async-mqtt": "^2.3.0",
+    "js-yaml": "^3.13.1",
+    "mqtt": "^2.18.8"
+  }
+}

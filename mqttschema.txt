@@ -1,0 +1,30 @@
+HA discovery:
+Topic - /homeassistant/{type}/{entity id}/config
+Payload - {
+    name
+    unique_id
+    state_topic
+    availability_topic
+}
+
+*** Payload needs more content to enable an entity to be recognised as part of a device ***
+Can also add via_device
+Need to consider what the bridge device is: sia2mqtt? then have each zone as a separate device (with open/closed or on/off) and a single device for "alarm" that has 
+entities of "set" (set/unset, part set), "alarm status" (intruder, confirmed intruder, fire, confirmed fire, pa, tamper). 
+
+Xioami door contact sensor
+
+Discovery:
+homeassistant/sensor/0x00158d00011c7c19/battery/config
+homeassistant/sensor/0x00158d00011c7c19/linkquality/config
+
+Availability
+zigbee2mqtt/bridge/state used by all entities
+
+Identifiers:
+zigbee2mqtt_0x00158d00011c7c19 used by all entities
+
+State Topic
+state_topic: zigbee2mqtt/contactDoor1 used by all entities
+
+unique_id: 0x00158d00011c7c19_battery_zigbee2mqtt
