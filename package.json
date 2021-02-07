@@ -1,11 +1,10 @@
 {
-  "name": "sia2mqtt-ha",
-  "version": "1.0.0",
+  "name": "sia2mqtt4ha",
+  "version": "0.1.0",
   "description": "",
   "main": "./dist/server.js",
   "scripts": {
     "postinstall": "tsc -p ./src",
-    "postinstallx": "ls src",
     "start": "node ./dist/server.js"
   },
   "keywords": [],

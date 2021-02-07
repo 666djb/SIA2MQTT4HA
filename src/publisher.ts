@@ -15,7 +15,7 @@ export class Publisher {
             },
             username: config.username,
             password: config.password,
-            clientId: "SIA2MQTT"
+            clientId: "SIA2MQTT4HA"
         } as IClientOptions
 
         this.mqttClient = MQTT.connect(config.brokerUrl, options)
@@ -34,12 +34,12 @@ export class Publisher {
         // There is one device for SIA2MQTT we call this sia2mqtt_alarmpanel
         // All of the entities belong to this device
         let device = {
-            identifiers: ["sia2mqtt_alarmpanel"],
+            identifiers: ["sia2mqtt4ha_alarmpanel"],
             name: "AlarmPanel",
-            manufacturer: "SIA2MQTT",
-            model: "SIA2MQTT App",
+            manufacturer: "SIA2MQTT4HA",
+            model: "SIA2MQTT4HA App",
             sw_version: "0.1",
-            via_device: "sia2mqtt_bridge1"
+            via_device: "sia2mqtt4ha_bridge1"
         }
 
         // These are the standard entities: set_status, alarm_status, comms_test and event
@@ -49,36 +49,36 @@ export class Publisher {
             {
                 type: "sensor",
                 name: "Set Status",
-                device_id: "sia2mqtt_alarmpanel",
+                device_id: "sia2mqtt4ha_alarmpanel",
                 short_name: "set_status",
-                unique_id: "sia2mqtt_alarmpanel_set_status",
+                unique_id: "sia2mqtt4ha_alarmpanel_set_status",
                 value_template: '{{ value_json.status }}',
                 icon: "mdi:security"
             },
             {
                 type: "sensor",
                 name: "Alarm Status",
-                device_id: "sia2mqtt_alarmpanel",
+                device_id: "sia2mqtt4ha_alarmpanel",
                 short_name: "alarm_status",
-                unique_id: "sia2mqtt_alarmpanel_alarm_status",
+                unique_id: "sia2mqtt4ha_alarmpanel_alarm_status",
                 value_template: '{{ value_json.status }}',
                 icon: "mdi:bell"
             },
             {
                 type: "sensor",
                 name: "Comms Status",
-                device_id: "sia2mqtt_alarmpanel",
+                device_id: "sia2mqtt4ha_alarmpanel",
                 short_name: "comms_test",
-                unique_id: "sia2mqtt_alarmpanel_comms_test",
+                unique_id: "sia2mqtt4ha_alarmpanel_comms_test",
                 value_template: '{{ value_json.status }}',
                 icon: "mdi:check-network"
             },
             {
                 type: "sensor",
                 name: "Event",
-                device_id: "sia2mqtt_alarmpanel",
+                device_id: "sia2mqtt4ha_alarmpanel",
                 short_name: "event",
-                unique_id: "sia2mqtt_alarmpanel_event",
+                unique_id: "sia2mqtt4ha_alarmpanel_event",
                 value_template: '{{ value_json.code }}',
                 icon: "mdi:flag"
             }

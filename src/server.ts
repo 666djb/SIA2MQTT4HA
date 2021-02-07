@@ -12,13 +12,11 @@ import { exit } from "process"
 console.log("starting")
 
 try{
-    let data=fs.readFileSync("/data/options.json")
+    let data=fs.readFileSync("/data/options.json", "utf8")
     console.log("options.json:\n",data)
 }catch(error){
     console.log("Error:",error)
 }
-
-//exit()
 
 const config = getConfig()
 const publisher = new Publisher(config.mqtt)

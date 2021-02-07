@@ -2,7 +2,7 @@ mqtt:
   brokerUrl : mqtt://ha.home.djb.org.uk
   username: mqtt
   password: mqtt
-  baseTopic: sia2mqtt
+  baseTopic: sia2mqtt4ha
   discoveryTopic: homeassistant
 
 sia:

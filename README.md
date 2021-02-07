@@ -24,11 +24,11 @@ https://www.security.honeywell.com/uk/All-Categories/intruder-detection-systems/
 
 # Docker
 
-Build: docker build -t sia2mqtt:latest .
+Build from the command line (e.g. not in Home Assistant): docker build -t sia2mqtt:latest --build-arg BUILD_FROM=alpine .
 
 Run: docker run -v /config.yml:/config.yml -p 10002:10002 sia2mqtt
 
-* Change the -p to reflect the port number you have configured in your Galaxy and put in config.yml
+* Change the -p to reflect the port number you have configured in your Galaxy Flex panel and put in config.yml
 
 # To do
 
