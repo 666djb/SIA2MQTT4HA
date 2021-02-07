@@ -31,10 +31,8 @@ export async function handleSystemEvent(event: Event, publisher: Publisher): Pro
     if (state) {
         // If this is an unset (or manual test) event then we assert that the alarm condition is none
         if(event.code == "OA" || event.code == "OG" || event.code == "RX") {
-            //await publisher.publish(alarm, "None")
             await publisher.publishJSON(alarm, {status: "None", time: event.time})
         }
-        //await publisher.publish(`${state[1]}`, state[0])
         await publisher.publishJSON(`${state[1]}`, {status: state[0], time: event.time})
         return 
     } else {
