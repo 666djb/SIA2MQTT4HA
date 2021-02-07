@@ -1,11 +1,10 @@
 {
-  "name": "typeflex",
-  "version": "1.0.0",
+  "name": "sia2mqtt4ha",
+  "version": "0.1.0",
   "description": "",
   "main": "./dist/server.js",
   "scripts": {
     "postinstall": "tsc -p ./src",
-    "postinstallx": "ls src",
     "start": "node ./dist/server.js"
   },
   "keywords": [],
@@ -17,12 +16,12 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/dklemm/FlexSIA2MQTT.git"
+    "url": ""
   },
   "dependencies": {
-    "@types/js-yaml": "^3.12.1",
+    "@types/js-yaml": "^4.0.0",
     "async-mqtt": "^2.3.0",
-    "js-yaml": "^3.13.1",
+    "js-yaml": "^4.0.0",
     "mqtt": "^2.18.8"
   }
 }

@@ -1,0 +1,36 @@
+{
+    "name": "SIA2MQTT4HA",
+    "version": "0.1.1",
+    "slug": "sia2mqtt_ha",
+    "description": "Service that acts as an alarm receiving centre for Honeywell Flex alarm panels",
+    "arch": [
+        "aarch64"
+    ],
+    "unusedarch": [
+        "armhf",
+        "armv7",
+        "aarch64",
+        "amd64",
+        "i386"
+    ],
+    "startup": "application",
+    "boot": "auto",
+    "ports": {
+        "10002/tcp": 10002
+    },
+    "ports_description": {
+        "10002/tcp": "SIA Receiver port as set in alarm panel"
+    },
+    "options": {
+        "brokerUrl": "mqtt://ha.home.djb.org.uk",
+        "username": "mqtt",
+        "password": "mqtt",
+        "port": 10002
+    },
+    "schema": {
+        "brokerUrl": "str",
+        "username": "str",
+        "password": "str",
+        "port": "int"
+    }
+}

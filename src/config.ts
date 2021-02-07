@@ -1,11 +1,10 @@
-
-import yaml from 'js-yaml';
-import fs from 'fs';
+import yaml from 'js-yaml'
+import fs from 'fs'
 
 export interface Config {
     mqtt: MqttConfig
     sia: SiaServerConfig
-    zones: { [zoneId: string] : ZoneConfig; };
+    zones: { [zoneId: string]: ZoneConfig }
 }
 
 export interface SiaServerConfig {
@@ -21,10 +20,10 @@ export interface MqttConfig {
 }
 
 export interface ZoneConfig {
-    name: string;
-    handler: string;
+    name: string
+    handler: string
 }
 
-export function getConfig() : Config {
-    return yaml.safeLoad(fs.readFileSync('./config.yml', 'utf8'));
+export function getConfig(): Config {
+    return yaml.load(fs.readFileSync('./config.yml', 'utf8')) as Config
 }

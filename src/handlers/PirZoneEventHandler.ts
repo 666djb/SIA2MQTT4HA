@@ -1,24 +1,23 @@
-import {ZoneEventHandler} from "./ZoneEventHandler";
-import {ZoneEvent} from "../events/ZoneEvent";
-import {Publisher} from "../publisher";
-import {ZoneConfig} from "../config";
+import { ZoneEventHandler } from "./ZoneEventHandler"
+import { Event } from "../events/Event"
+import { Publisher } from "../publisher"
+import { ZoneConfig } from "../config"
 
-const stateMap : { [state: string] : string } = {
-    "RO" : "motion"
-};
+const stateMap: { [state: string]: string } = {
+  "RO": "motion"
+}
 
 export class PirZoneEventHandler implements ZoneEventHandler {
 
-  constructor(private zoneConfig : ZoneConfig) {}
+  constructor(private zoneConfig: ZoneConfig) { }
 
-  async handleZoneEvent(event : ZoneEvent, publisher: Publisher) : Promise<any> {
+  async handleZoneEvent(event: Event, publisher: Publisher): Promise<any> {
+    let state = stateMap[event.code]
 
-      let state = stateMap[event.state];
-
-      if (state) {
-        return await publisher.publish(`zones/${this.zoneConfig.name}`, {
-            state : state
-        });
-      }
+    if (state) {
+      return await publisher.publish(`${this.zoneConfig.name}`, state)
+    } else {
+      console.log("handZoneEvent_PIR(): no code match for:", state)
+    }
   }
 }

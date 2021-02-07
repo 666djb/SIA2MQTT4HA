@@ -1,35 +1,24 @@
-//const regex = /^ti(?<time>[0-9]{2}:[0-9]{2})\/(?<id>[a-z,0-9]{5})\/(?<code>[A-Z]{2})$/mg
-//const regex = /^ti(?<time>[0-9]{2}:[0-9]{2})\/|(?<group>ri[0-9]{3})?(?:\/)?|(?<peripheral>pi[0-9]{3})?|(?<user>id[0-9]{3})?(?:\/)?(?<code>[A-Z]{2}(?<zone>[0-9]{4})?)?/mg
-//
-
-// ti13:30/id249/RX
-
 export class Event {
-
     constructor(
         public accountId: string = "",
         public time: string = "",
         public groupModifier = "",
         public peripheralModifier = "",
         public userModifier = "",
+        public vaModifier = "", // What is va?
         public code: string = "",
         public zone: string = "",
         public text: string = ""
-    ) {
-    }
+    ) {}
 
     static parse(eventData: string): Event {
-
         console.log("eventData:", eventData)
 
         let event = new Event()
-
         let split = eventData.split("/")
 
-        console.log("split:", split)
-
         // Must have time and code
-        // May have time, group, peripheral, user, code, zone
+        // May have time, group modifier, peripheral modifier, user modifier, va modifier, SIA code, zone
         if (split.length < 2 || split[0].slice(0, 2) != "ti" || split[0].length != 7) {
             console.log("No time or code")
             return
@@ -37,7 +26,7 @@ export class Event {
             event.time = split[0].slice(2, 7)
         }
 
-        // For each modifiers
+        // For each modifier (there may be one or more)
         for (let i = 1; i < (split.length) - 1; i++) {
             switch (split[i].slice(0, 2)) { // This can be group, peripheral or user
                 case "pi":
@@ -48,6 +37,9 @@ export class Event {
                     break
                 case "id":
                     event.userModifier = split[i].slice(2)
+                    break
+                case "va":
+                    event.vaModifier = split[i].slice(2)
                     break
                 default:
                     console.log("Error: unknown modifier")
