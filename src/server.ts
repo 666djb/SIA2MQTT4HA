@@ -9,12 +9,8 @@ const config = getConfig()
 const publisher = new Publisher(config.mqtt)
 const siaServer = new SIAServer(config.sia)
 
-// siaServer.on('Ready', async function () {
-//     await publisher.publishOnline();
-// })
-
 // This is used to publish updates to zone entities
-// it publishes to baseTopic/zone
+// it publishes to $baseTopic/zone
 siaServer.on('ZoneEvent', async function (event: Event) {
     const zoneConfig = config.zones[event.zone]
     const handler = getZoneEventHandler(zoneConfig)
@@ -22,13 +18,13 @@ siaServer.on('ZoneEvent', async function (event: Event) {
 })
 
 // This is used when there is a system event such as set/unset
-// it publishes to baseTopic/set|alarm|comms
+// it publishes to $baseTopic/set|alarm|comms
 siaServer.on('SystemEvent', async function (event: Event) {
     await handleSystemEvent(event, publisher)
 })
 
 // This is used to publish raw event data
-// it publishes to baseTopic/event
+// it publishes to $baseTopic/event
 siaServer.on('Event', async function(event: Event) {
-    await publisher.publish("event", JSON.stringify(event), true)
+    await publisher.publishJSON("event", event, true)
 })

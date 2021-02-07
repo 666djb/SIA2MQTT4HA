@@ -31,7 +31,20 @@ export class Publisher {
     }
 
     public async publishOnline(): Promise<any> {
+        // There is one device for SIA2MQTT we call this sia2mqtt_alarmpanel
+        // All of the entities belong to this device
+        let device = {
+            identifiers: ["sia2mqtt_alarmpanel"],
+            name: "AlarmPanel",
+            manufacturer: "SIA2MQTT",
+            model: "SIA2MQTT App",
+            sw_version: "0.1",
+            via_device: "sia2mqtt_bridge1"
+        }
 
+        // These are the standard entities: set_status, alarm_status, comms_test and event
+        // all which will appear in HA under $baseTopic and will have JSON formatted messages
+        // published to them.
         let entities = [
             {
                 type: "sensor",
@@ -39,15 +52,8 @@ export class Publisher {
                 device_id: "sia2mqtt_alarmpanel",
                 short_name: "set_status",
                 unique_id: "sia2mqtt_alarmpanel_set_status",
-                json_attributes_topic: "",
                 value_template: '{{ value_json.status }}',
-                initial_state: "Unset",
-                icon: "mdi:security",
-                device: {
-                    identifiers: ["sia2mqtt_alarmpanel1"],
-                    name: "AlarmPanel",
-                    via_device: "sia2mqtt_bridge1"
-                }
+                icon: "mdi:security"
             },
             {
                 type: "sensor",
@@ -55,15 +61,8 @@ export class Publisher {
                 device_id: "sia2mqtt_alarmpanel",
                 short_name: "alarm_status",
                 unique_id: "sia2mqtt_alarmpanel_alarm_status",
-                json_attributes_topic: "",
                 value_template: '{{ value_json.status }}',
-                initial_state: "None",
-                icon: "mdi:bell",
-                device: {
-                    identifiers: ["sia2mqtt_alarmpanel1"],
-                    name: "AlarmPanel",
-                    via_device: "sia2mqtt_bridge1"
-                }
+                icon: "mdi:bell"
             },
             {
                 type: "sensor",
@@ -71,15 +70,8 @@ export class Publisher {
                 device_id: "sia2mqtt_alarmpanel",
                 short_name: "comms_test",
                 unique_id: "sia2mqtt_alarmpanel_comms_test",
-                json_attributes_topic: "",
                 value_template: '{{ value_json.status }}',
-                initial_state: "None",
-                icon: "mdi:check-network",
-                device: {
-                    identifiers: ["sia2mqtt_alarmpanel1"],
-                    name: "AlarmPanel",
-                    via_device: "sia2mqtt_bridge1"
-                }
+                icon: "mdi:check-network"
             },
             {
                 type: "sensor",
@@ -87,13 +79,8 @@ export class Publisher {
                 device_id: "sia2mqtt_alarmpanel",
                 short_name: "event",
                 unique_id: "sia2mqtt_alarmpanel_event",
-                json_attributes_topic: "event_json",
-                value_template: '{{ value_json.status }}',
-                device: {
-                    identifiers: ["sia2mqtt_alarmpanel1"],
-                    name: "AlarmPanel",
-                    via_device: "sia2mqtt_bridge1"
-                }
+                value_template: '{{ value_json.code }}',
+                icon: "mdi:flag"
             }
         ]
 
@@ -103,19 +90,18 @@ export class Publisher {
                 'online',
                 { retain: true } as IClientPublishOptions)
 
-            // Advertise our presence so we can be discovered
-            // going to need to do this for all things: set/unset alarm zones that we want discovered
+            // Advertise the presence of all entities so they can be discovered
             for (let entity in entities) {
                 let thisEntity = entities[entity]
                 let entityDiscoveryTopic = `${this.config.discoveryTopic}/${thisEntity.type}/${thisEntity.device_id}/${thisEntity.short_name}/config`
                 let entityData = JSON.stringify({
                     availability_topic: `${this.config.baseTopic}/bridge/availability`,
-                    device: thisEntity.device,
+                    device: device,
                     name: thisEntity.name,
                     state_topic: `${this.config.baseTopic}/${thisEntity.short_name}`,
                     unique_id: thisEntity.unique_id,
                     icon: thisEntity.icon,
-                    json_attributes_topic: thisEntity.json_attributes_topic,
+                    json_attributes_topic: `${this.config.baseTopic}/${thisEntity.short_name}`,
                     value_template: thisEntity.value_template
                 })
 
@@ -123,9 +109,9 @@ export class Publisher {
             }
 
             // Set initial statuses
-            await this.mqttClient.publish(`${this.config.baseTopic}/alarm_status`, "None yet", { retain: true } as IClientPublishOptions)
-            await this.mqttClient.publish(`${this.config.baseTopic}/set_status`, "None yet", { retain: true } as IClientPublishOptions)
-            await this.mqttClient.publish(`${this.config.baseTopic}/comms_test`, "None yet", { retain: true } as IClientPublishOptions)
+            await this.publishJSON("alarm_status", {status: "None yet", time: "00:00"}, true)
+            await this.publishJSON("set_status", {status: "None yet", time: "00:00"}, true)
+            await this.publishJSON("comms_test", {status: "None yet", time: "00:00"}, true)
 
         } catch (ex) {
             console.log(ex)
@@ -133,18 +119,19 @@ export class Publisher {
     }
 
     public async publish(subTopic: string, data: string, retain?: boolean) {
-        console.log("retain:", retain||false)
         try {
-            await this.mqttClient.publish(`${this.config.baseTopic}/${subTopic}`, data, {retain: retain||false} as IClientPublishOptions)
+            await this.mqttClient.publish(`${this.config.baseTopic}/${subTopic}`, JSON.stringify({status: data}),
+                {retain: retain||false} as IClientPublishOptions)
             console.log("Published: " + `${this.config.baseTopic}/${subTopic}/${data}`)
         } catch (error) {
             console.log(error)
         }
     }
 
-    public async publishJSON(subTopic: string, data: object) {
+    public async publishJSON(subTopic: string, data: object, retain?: boolean) {
         try {
-            await this.mqttClient.publish(`${this.config.baseTopic}/${subTopic}`, JSON.stringify(data))
+            await this.mqttClient.publish(`${this.config.baseTopic}/${subTopic}`, JSON.stringify(data),
+                {retain: retain||false} as IClientPublishOptions)
             console.log("Published: " + `${this.config.baseTopic}/${subTopic}/${JSON.stringify(data)}`)
         } catch (error) {
             console.log(error)

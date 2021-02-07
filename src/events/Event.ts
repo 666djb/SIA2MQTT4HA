@@ -1,21 +1,4 @@
-//const regex = /^ti(?<time>[0-9]{2}:[0-9]{2})\/(?<id>[a-z,0-9]{5})\/(?<code>[A-Z]{2})$/mg
-//const regex = /^ti(?<time>[0-9]{2}:[0-9]{2})\/|(?<group>ri[0-9]{3})?(?:\/)?|(?<peripheral>pi[0-9]{3})?|(?<user>id[0-9]{3})?(?:\/)?(?<code>[A-Z]{2}(?<zone>[0-9]{4})?)?/mg
-//
-// ti13:30/id249/RX
-
 export class Event {
-
-    //AaccountId: string
-    // static accountId: string
-    // static time: string
-    // static groupModifier: string
-    // static peripheralModifier: string
-    // static userModifier: string
-    // static vaModifier: string
-    // static code: string
-    // static zone: string
-    // static text: string
-
     constructor(
         public accountId: string = "",
         public time: string = "",
@@ -26,43 +9,16 @@ export class Event {
         public code: string = "",
         public zone: string = "",
         public text: string = ""
-    ) {
-        // this.accountId=accountId
-        // this.time=time
-        // this.groupModifier=groupModifier
-        // this.peripheralModifier=peripheralModifier
-        // this.userModifier=userModifier
-        // this.vaModifier=vaModifier
-        // this.code=code
-        // this.zone=zone
-        // this.text=text
-    }
-
-    // public toJSON() : Object {
-    //     return {
-    //         accountId: this.accountId,
-    //         time: this.time,
-    //         groupModifier: this.groupModifier,
-    //         peripheralModifier: this.peripheralModifier,
-    //         userModifier: this.userModifier,
-    //         vaModifier: this.vaModifier,
-    //         code: this.code,
-    //         zone: this.zone,
-    //         text: this.text
-    //     }
-    // }
+    ) {}
 
     static parse(eventData: string): Event {
         console.log("eventData:", eventData)
 
         let event = new Event()
-
         let split = eventData.split("/")
 
-        //console.log("split:", split)
-
         // Must have time and code
-        // May have time, group, peripheral, user, code, zone
+        // May have time, group modifier, peripheral modifier, user modifier, va modifier, SIA code, zone
         if (split.length < 2 || split[0].slice(0, 2) != "ti" || split[0].length != 7) {
             console.log("No time or code")
             return

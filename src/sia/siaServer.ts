@@ -4,9 +4,8 @@ import { SIABlock } from "./siaBlock"
 import { FunctionCodes } from "../functionCodes"
 import { Event } from "../events/Event"
 import * as events from "events"
-//import { SSL_OP_SSLEAY_080_CLIENT_DH_BUG } from 'constants'
 
-const ACK_SIA_BLOCK = new SIABlock(FunctionCodes.acknoledge, "")
+const ACK_SIA_BLOCK = new SIABlock(FunctionCodes.acknowledge, "")
 
 export class SIAServer extends events.EventEmitter {
 

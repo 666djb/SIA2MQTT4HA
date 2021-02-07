@@ -7,8 +7,8 @@ export enum FunctionCodes {
     res_5              = 0x35,
     ack_and_standby    = 0x36,
     ack_and_disconnect = 0x37,
-    acknoledge         = 0x38,
-    alt_acknoledge     = 0x08,
+    acknowledge        = 0x38,
+    alt_acknowledge    = 0x08,
     reject             = 0x39,
     alt_reject         = 0x09,
     // Info blocks
