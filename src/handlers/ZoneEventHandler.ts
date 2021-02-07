@@ -1,16 +1,17 @@
-import {ZoneEvent} from "../events/ZoneEvent";
-import {Publisher} from "../publisher";
-import {DoorZoneEventHandler} from "./DoorZoneEventHandler";
-import {ZoneConfig} from "../config";
-import {PirZoneEventHandler} from "./PirZoneEventHandler";
+import { Event } from "../events/Event"
+import { Publisher } from "../publisher"
+import { DoorZoneEventHandler } from "./DoorZoneEventHandler"
+import { ZoneConfig } from "../config"
+import { PirZoneEventHandler } from "./PirZoneEventHandler"
 
-export function getZoneEventHandler(zoneConfig : ZoneConfig) : ZoneEventHandler {
+export function getZoneEventHandler(zoneConfig: ZoneConfig): ZoneEventHandler {
+    console.log("getZoneHandlder handler:", zoneConfig.handler)
     switch (zoneConfig.handler) {
-        case "door" : return new DoorZoneEventHandler(zoneConfig);
-        case "pir" : return new PirZoneEventHandler(zoneConfig);
+        case "door": return new DoorZoneEventHandler(zoneConfig)
+        case "pir": return new PirZoneEventHandler(zoneConfig)
     }
 }
 
 export interface ZoneEventHandler {
-    handleZoneEvent(event : ZoneEvent, publisher: Publisher) : Promise<any>;
+    handleZoneEvent(event: Event, publisher: Publisher): Promise<any>
 }

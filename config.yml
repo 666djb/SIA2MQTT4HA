@@ -9,10 +9,36 @@ sia:
   port: 10002
 
 zones:
-  1021:
+  1001:
     name: front_door
     handler: door
-
-  1018:
-    name: office_pir
+  1002:
+    name: hall_pir
     handler: pir
+  1003:
+    name: lounge_pir
+    handler: pir
+  1004:
+    name: dining_room_pir
+    handler: pir
+  1011:
+    name: landing_pir
+    handler: pir
+  1012:
+    name: garage_pir
+    handler: pir 
+  1013:
+    name: pa_pir
+    handler: pir
+  1014:
+    name: smoke_pir
+    handler: pir 
+  1015:
+    name: garage_door
+    handler: door
+  1021:
+    name: loft_pir
+    handler: pir 
+  1022:
+    name: back_door
+    handler: door
