@@ -9,6 +9,7 @@ export interface Config {
 
 export interface SiaServerConfig {
     port: number
+    account: number
 }
 
 export interface MqttConfig {

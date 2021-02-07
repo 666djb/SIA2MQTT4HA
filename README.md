@@ -1,4 +1,4 @@
-# SIA2MQTT HA
+# SIA2MQTT4HA
 Galaxy Flex SIA to MQTT server for Home Assistant
 
 This package is based on work from https://github.com/dklemm/FlexSIA2MQTT.git
@@ -22,6 +22,15 @@ It should work with:
 
 https://www.security.honeywell.com/uk/All-Categories/intruder-detection-systems/control-panels/galaxy-flex-series
 
-# Docker 
+# Docker
 
-docker run sia2mqtt -p 10500:10500 -v /config.yml:/config.yml
+Build: docker build -t sia2mqtt:latest .
+
+Run: docker run -v /config.yml:/config.yml -p 10002:10002 sia2mqtt
+
+* Change the -p to reflect the port number you have configured in your Galaxy and put in config.yml
+
+# To do
+
+* Describe Lovelace entities panel
+* Look at SIA level 4 reporting to enable zone activations to be reported

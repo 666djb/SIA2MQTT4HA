@@ -5,6 +5,20 @@ import { getZoneEventHandler } from "./handlers/ZoneEventHandler"
 import { Event } from "./events/Event"
 import { handleSystemEvent } from "./handlers/SystemEventHandler"
 
+import fs from "fs"
+import { exit } from "process"
+
+// Testing
+fs.readFile("/data/options.json", "utf8", (data,err) => {
+    if(err){
+        console.log("Error reading options.json:",err)
+    }else{
+        console.log("options.json:\n",data)
+    }
+})
+
+exit()
+
 const config = getConfig()
 const publisher = new Publisher(config.mqtt)
 const siaServer = new SIAServer(config.sia)
