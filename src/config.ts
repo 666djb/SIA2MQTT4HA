@@ -9,7 +9,6 @@ export interface Config {
 
 export interface SiaServerConfig {
     port: number
-    account: number
 }
 
 export interface MqttConfig {
@@ -26,5 +25,5 @@ export interface ZoneConfig {
 }
 
 export function getConfig(): Config {
-    return yaml.safeLoad(fs.readFileSync('./config.yml', 'utf8'))
+    return yaml.load(fs.readFileSync('./config.yml', 'utf8')) as Config
 }

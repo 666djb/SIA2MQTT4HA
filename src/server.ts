@@ -9,15 +9,16 @@ import fs from "fs"
 import { exit } from "process"
 
 // Testing
-fs.readFile("/data/options.json", "utf8", (data,err) => {
-    if(err){
-        console.log("Error reading options.json:",err)
-    }else{
-        console.log("options.json:\n",data)
-    }
-})
+console.log("starting")
 
-exit()
+try{
+    let data=fs.readFileSync("/data/options.json")
+    console.log("options.json:\n",data)
+}catch(error){
+    console.log("Error:",error)
+}
+
+//exit()
 
 const config = getConfig()
 const publisher = new Publisher(config.mqtt)

@@ -7,7 +7,6 @@ mqtt:
 
 sia:
   port: 10002
-  account: 666
 
 zones:
   1001:
