@@ -1,6 +1,6 @@
 #ARG BUILD_FROM
 #FROM $BUILD_FROM
-FROM alpine
+FROM arm32v7/alpine
 
 ENV LANG C.UTF-8
 
