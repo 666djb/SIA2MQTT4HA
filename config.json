@@ -12,6 +12,12 @@
     ],
     "startup": "application",
     "boot": "auto",
+    "ports": {
+        "10002/tcp": 10002
+    },
+    "ports_description": {
+        "10002/tcp": "SIA Receiver port as set in alarm panel"
+    },
     "options": {
         "brokerUrl": "mqtt://ha.home.djb.org.uk",
         "username": "mqtt",
