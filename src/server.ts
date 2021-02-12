@@ -4,12 +4,7 @@ import { SIAServer } from "./sia/siaServer"
 import { getZoneEventHandler } from "./handlers/ZoneEventHandler"
 import { Event } from "./events/Event"
 import { handleSystemEvent } from "./handlers/SystemEventHandler"
-
 import fs from "fs"
-import { exit } from "process"
-
-// Testing
-console.log("starting")
 
 try{
     let data=fs.readFileSync("/data/options.json", "utf8")
