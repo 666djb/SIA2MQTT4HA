@@ -45,6 +45,10 @@ export class SIAServer extends events.EventEmitter {
                     break
                 case FunctionCodes.ascii:
                     eventText = block.data
+                    // Remove any leading space
+                    eventText=eventText.replace(/^ /,"")
+                    // Replae multiple spaces after first string with single space
+                    eventText=eventText.replace(/ +/, " ")
                     break
                 case FunctionCodes.end_of_data:
                     if (event != null && accountId != "" && event.time != "" && event.code != "" && eventText != "") {
