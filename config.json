@@ -4,9 +4,6 @@
     "slug": "sia2mqtt_ha",
     "description": "Service that acts as an alarm receiving centre for Honeywell Flex alarm panels",
     "arch": [
-        "armv7"
-    ],
-    "unusedarch": [
         "armhf",
         "armv7",
         "aarch64",
