@@ -105,7 +105,7 @@ export class Publisher {
                     value_template: thisEntity.value_template
                 })
 
-                await this.mqttClient.publish(entityDiscoveryTopic, entityData)
+                await this.mqttClient.publish(entityDiscoveryTopic, entityData, { retain: true } as IClientPublishOptions)
             }
 
             // Set initial statuses
