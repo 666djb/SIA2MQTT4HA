@@ -16,12 +16,10 @@
   },
   "repository": {
     "type": "git",
-    "url": ""
+    "url": "https://github.com/666djb/sia2mqtt4ha.git"
   },
   "dependencies": {
-    "@types/js-yaml": "^4.0.0",
     "async-mqtt": "^2.3.0",
-    "js-yaml": "^4.0.0",
     "mqtt": "^2.18.8"
   }
 }

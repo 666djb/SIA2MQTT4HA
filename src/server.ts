@@ -8,7 +8,6 @@ import { handleSystemEvent } from "./handlers/SystemEventHandler"
 const CONFIG_FILE="/data/options.json"
 
 const config = getConfig(CONFIG_FILE)
-console.log("config:",config)
 const publisher = new Publisher(config.mqtt)
 const siaServer = new SIAServer(config.sia)
 

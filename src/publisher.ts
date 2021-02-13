@@ -30,7 +30,7 @@ export class Publisher {
         })
     }
 
-    public async publishOnline(): Promise<any> {
+    private async publishOnline(): Promise<any> {
         // There is one device for SIA2MQTT we call this sia2mqtt_alarmpanel
         // All of the entities belong to this device
         let device = {
@@ -94,7 +94,7 @@ export class Publisher {
             for (let entity in entities) {
                 let thisEntity = entities[entity]
                 let entityDiscoveryTopic = `${this.config.discoveryTopic}/${thisEntity.type}/${thisEntity.device_id}/${thisEntity.short_name}/config`
-                let entityData = JSON.stringify({
+                let entityData = {
                     availability_topic: `${this.config.baseTopic}/bridge/availability`,
                     device: device,
                     name: thisEntity.name,
@@ -103,9 +103,10 @@ export class Publisher {
                     icon: thisEntity.icon,
                     json_attributes_topic: `${this.config.baseTopic}/${thisEntity.short_name}`,
                     value_template: thisEntity.value_template
-                })
+                }
 
-                await this.mqttClient.publish(entityDiscoveryTopic, entityData, { retain: true } as IClientPublishOptions)
+                //await this.mqttClient.publish(entityDiscoveryTopic, entityData, { retain: true } as IClientPublishOptions)
+                await this.publishJSON(entityDiscoveryTopic, entityData, true)
             }
 
             // Set initial statuses

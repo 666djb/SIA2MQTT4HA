@@ -1,4 +1,3 @@
-//import yaml from 'js-yaml'
 import fs from 'fs'
 
 export interface Config {
@@ -25,6 +24,5 @@ export interface ZoneConfig {
 }
 
 export function getConfig(configFile: string): Config {
-    //return yaml.load(fs.readFileSync('./config.yml', 'utf8')) as Config
     return JSON.parse(fs.readFileSync(configFile, "utf8")) as Config
 }
