@@ -4,16 +4,11 @@ import { SIAServer } from "./sia/siaServer"
 import { getZoneEventHandler } from "./handlers/ZoneEventHandler"
 import { Event } from "./events/Event"
 import { handleSystemEvent } from "./handlers/SystemEventHandler"
-import fs from "fs"
 
-try{
-    let data=fs.readFileSync("/data/options.json", "utf8")
-    console.log("options.json:\n",data)
-}catch(error){
-    console.log("Error:",error)
-}
+const CONFIG_FILE="/data/options.json"
 
-const config = getConfig()
+const config = getConfig(CONFIG_FILE)
+console.log("config:",config)
 const publisher = new Publisher(config.mqtt)
 const siaServer = new SIAServer(config.sia)
 
