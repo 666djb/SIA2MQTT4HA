@@ -1,6 +1,6 @@
 {
     "name": "SIA2MQTT4HA",
-    "version": "0.1.8",
+    "version": "0.1.9",
     "slug": "sia2mqtt4ha",
     "description": "Service that acts as an alarm receiving centre for Honeywell Flex alarm panels",
     "arch": [
@@ -20,7 +20,7 @@
     },
     "options": {
         "mqtt": {
-            "brokerUrl": "mqtt://ha.home.djb.org.uk",
+            "brokerUrl": "mqtt://core-mosquitto",
             "discoveryTopic": "homeassistant",
             "baseTopic": "sia2mqtt4ha",
             "username": "mqtt",
