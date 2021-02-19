@@ -31,7 +31,7 @@ export class Publisher {
     }
 
     private async publishOnline(): Promise<any> {
-        // There is one device for SIA2MQTT we call this sia2mqtt_alarmpanel
+        // There is one device for SIA2MQTT4HA we call this sia2mqtt4ha_alarmpanel
         // All of the entities belong to this device
         let device = {
             identifiers: ["sia2mqtt4ha_alarmpanel"],
