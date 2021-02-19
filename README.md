@@ -40,4 +40,4 @@ Run: "docker run -v /config.yml:/config.yml -p 10002:10002 sia2mqtt4ha"
 * Fix configuration for when sia2mqttt4ha is run stand alone (at present you need to put config in /data/options.json or redefine the CONFIG_FILE constant in server.ts)
 * Describe Lovelace entities panel
 * Look at implementing encrypted event reporting from the panel
-* Look at SIA level 4 reporting to enable zone activations to be reported
+* Look at SIA level 4 reporting to enable zone activations to be reported. Whilst the config.json (for HA) allows zones to be defined, these are NOT used right now.

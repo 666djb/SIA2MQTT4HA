@@ -8,8 +8,8 @@
     "start": "node ./dist/server.js"
   },
   "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "author": "666djb",
+  "license": "MIT",
   "devDependencies": {
     "@types/node": "^12.20.0",
     "typescript": "^3.4.5"
