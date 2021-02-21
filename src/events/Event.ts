@@ -12,7 +12,7 @@ export class Event {
     ) {}
 
     static parse(eventData: string): Event {
-        console.log("eventData:", eventData)
+        //console.log("eventData:", eventData)
 
         let event = new Event()
         let split = eventData.split("/")
@@ -49,7 +49,7 @@ export class Event {
 
         // For the code and optional zone
         if (split[split.length - 1].length < 2) {
-            console.log("Error: node code")
+            console.log("Error: no code")
             return null
         } else {
             let thisSplit = split[split.length - 1].slice(0, 2)
