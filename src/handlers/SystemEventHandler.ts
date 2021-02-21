@@ -4,7 +4,6 @@ import { Publisher } from "../publisher"
 const set = "set_status"
 const alarm = "alarm_status"
 const comms = "comms_test"
-const json_attributes_topic = "event_json"
 
 const stateMap: { [state: string]: [string, string] } = {
     "CA": ["Full Set", set],
@@ -36,6 +35,6 @@ export async function handleSystemEvent(event: Event, publisher: Publisher): Pro
         await publisher.publishJSON(`${state[1]}`, {status: state[0], time: event.time})
         return 
     } else {
-        console.log("handleSystemEvent() no code match for:", event.code)
+        //console.log("handleSystemEvent() no code match for:", event.code)
     }
 }

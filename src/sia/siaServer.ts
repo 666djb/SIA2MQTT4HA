@@ -25,17 +25,22 @@ export class SIAServer extends events.EventEmitter {
 
     handleConnection(socket: Socket) {
         const emitter = this
-        let accountId = ""
         let eventText = ""
+        let accountId =""
         let event = new Event()
 
         const handleData = function (data: Buffer) {
             // Break down the received data in to a block with funcCode and data properties
             const block = SIABlock.fromBuffer(data)
 
+            // Debugging:
+            //console.log("block funcCode:",block.funcCode.toString(16))
+            //console.log("block (ascii):",block.data)
+
             // The function code will decide what we do next
-            // We expect to receive the following sequence of funcCodes: account_id, new_event_data, end_of_data when a new reportable event occurs
-            // If we don't get this sequence, we don't emit the event
+            // We expect to receive the following sequence of funcCodes on each connection from the alarm panel:
+            // account_id, new_event_data, ascii for each message
+            // end_of_data when all messages for this connection have been sent
             switch (block.funcCode) {
                 case FunctionCodes.account_id:
                     accountId = block.data
@@ -47,16 +52,17 @@ export class SIAServer extends events.EventEmitter {
                     eventText = block.data
                     // Remove any leading space
                     eventText=eventText.replace(/^ /,"")
-                    // Replae multiple spaces after first string with single space
+                    // Replace multiple spaces after first string with single space
                     eventText=eventText.replace(/ +/, " ")
-                    break
-                case FunctionCodes.end_of_data:
+
+                    // ASCII data is the last component of a message, so we check we've got all we need and emit the event message
                     if (event != null && accountId != "" && event.time != "" && event.code != "" && eventText != "") {
                         event.accountId = accountId
                         event.text = eventText
 
                         // Is this a zone event or a system event?
                         if (event.zone.length > 0) {
+                            // Todo implement ZoneEvent handling
                             emitter.emit("ZoneEvent", event)
                         } else {
                             emitter.emit("SystemEvent", event)
@@ -67,7 +73,9 @@ export class SIAServer extends events.EventEmitter {
                     } else {
                         console.log("Could not parse event, discarding")
                     }
-                    // Reset the event object
+
+                    break
+                case FunctionCodes.end_of_data:
                     event = new Event()
                     break;
                 default:
