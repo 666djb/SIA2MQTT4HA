@@ -23,8 +23,8 @@
             "brokerUrl": "mqtt://core-mosquitto",
             "discoveryTopic": "homeassistant",
             "baseTopic": "sia2mqtt4ha",
-            "username": "mqtt",
-            "password": "mqtt"
+            "username": null,
+            "password": null
         },
         "sia": {
             "port": 10002
@@ -45,6 +45,6 @@
         "sia": {
             "port": "int"
         },
-        "zones": [{"number": "number?","name": "str?","type": "str?"}]
+        "zones": [{"number": "number","name": "str","type": "str"}]
     }
 }
