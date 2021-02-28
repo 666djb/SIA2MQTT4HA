@@ -12,6 +12,7 @@ I have modified the FlexSIA2MQTT package to better suit my needs:
   * "alarm_status" to which JSON is published with status and time attributes where status can be Intruder, Intruder Confirm, Fire, Fire Confirm, Tamper, Panic
   * "comms_test" to which JSON is published with status and time attributes where status can be Automatic Test, Manual Test
   * "event" to which JSON is published containing the raw event
+* If Zones are configured in the config file, and the alarm panel is set to log open/close state of these (via CUSTOM-A/B and assemble zones menu), then the status of these is reported in Home Assistant (e.g. to trigger automations etc.). There are some limitations to this which I will write up later.
 
 I have only tested with:
 * Galaxy Flex 100+ with v3 firmware and Ethernet Module A083-00-02
@@ -40,4 +41,5 @@ Run: "docker run -v /config.yml:/config.yml -p 10002:10002 sia2mqtt4ha"
 * Fix configuration for when sia2mqttt4ha is run stand alone (at present you need to put config in /data/options.json or redefine the CONFIG_FILE constant in server.ts)
 * Describe Lovelace entities panel
 * Look at implementing encrypted event reporting from the panel
-* Look at SIA level 4 reporting to enable zone activations to be reported. Whilst the config.json (for HA) allows zones to be defined, these are NOT used right now.
+* Look at SIA level 4 control and polling (I now know how to do some of this)
+* Write up alarm panel config information

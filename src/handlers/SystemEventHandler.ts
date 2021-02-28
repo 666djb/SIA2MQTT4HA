@@ -11,6 +11,7 @@ const stateMap: { [state: string]: [string, string] } = {
     "CG": ["Part Set", set],
     "OA": ["Unset", set],
     "OG": ["Unset", set],
+    "OP": ["Unset", set],
     "BA": ["Alarm", alarm],
     "BF": ["Alarm", alarm],
     "BL": ["Alarm", alarm],
@@ -29,12 +30,12 @@ export async function handleSystemEvent(event: Event, publisher: Publisher): Pro
 
     if (state) {
         // If this is an unset (or manual test) event then we assert that the alarm condition is none
-        if(event.code == "OA" || event.code == "OG" || event.code == "RX") {
+        if(event.code == "OA" || event.code == "OG" || event.code == "OP" || event.code == "RX") {
             await publisher.publishJSON(alarm, {status: "None", time: event.time})
         }
         await publisher.publishJSON(`${state[1]}`, {status: state[0], time: event.time})
         return 
-    } else {
-        //console.log("handleSystemEvent() no code match for:", event.code)
     }
+
+    // If the state is not in the state map, just ignore it
 }
