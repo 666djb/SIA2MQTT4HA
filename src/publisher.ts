@@ -125,7 +125,7 @@ export class Publisher {
 
         try {
             // Set our bridge availability to online
-            await this.publish("/bridge/availability", "online", true)
+            await this.publish("bridge/availability", "online", true)
 
             // Advertise the presence of all standard entities so they can be discovered
             for (let entity in entities) {
