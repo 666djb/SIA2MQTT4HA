@@ -153,7 +153,7 @@ export class Publisher {
 
     public async publish(subTopic: string, data: string, retain?: boolean) {
         try {
-            await this.mqttClient.publish(`${this.config.baseTopic}/${subTopic}`, JSON.stringify({status: data}),
+            await this.mqttClient.publish(`${this.config.baseTopic}/${subTopic}`, data),
                 {retain: retain||false} as IClientPublishOptions)
             //console.log("Published: " + `${this.config.baseTopic}/${subTopic}/${data}`)
         } catch (error) {
