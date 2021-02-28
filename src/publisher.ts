@@ -59,7 +59,7 @@ export class Publisher {
                 json_attributes_topic: `${this.config.baseTopic}/set_status`,
                 name: "Set Status",
                 unique_id: "sia2mqtt4ha_alarmpanel_set_status",
-                //value_template: '{{ value_json.status }}',
+                value_template: '{{ value_json.status }}',
                 icon: "mdi:security"
             },
             {
