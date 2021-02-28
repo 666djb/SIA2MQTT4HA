@@ -26,7 +26,7 @@ export class SIAServer extends events.EventEmitter {
     handleConnection(socket: Socket) {
         const emitter = this
         let eventText = ""
-        let accountId =""
+        let accountId = ""
         let event = new Event()
 
         const handleData = function (data: Buffer) {
@@ -51,9 +51,9 @@ export class SIAServer extends events.EventEmitter {
                 case FunctionCodes.ascii:
                     eventText = block.data
                     // Remove any leading space
-                    eventText=eventText.replace(/^ /,"")
+                    eventText = eventText.replace(/^ /, "")
                     // Replace multiple spaces after first string with single space
-                    eventText=eventText.replace(/ +/, " ")
+                    eventText = eventText.replace(/ +/, " ")
 
                     // ASCII data is the last component of a message, so we check we've got all we need and emit the event message
                     if (event != null && accountId != "" && event.time != "" && event.code != "" && eventText != "") {
@@ -62,18 +62,15 @@ export class SIAServer extends events.EventEmitter {
 
                         // Is this a zone event or a system event?
                         if (event.zone.length > 0) {
-                            // Todo implement ZoneEvent handling
                             emitter.emit("ZoneEvent", event)
                         } else {
                             emitter.emit("SystemEvent", event)
+                            // Emit the raw event too
+                            emitter.emit("Event", event)
                         }
-
-                        // Emit the raw event too
-                        emitter.emit("Event", event)
                     } else {
                         console.log("Could not parse event, discarding")
                     }
-
                     break
                 case FunctionCodes.end_of_data:
                     event = new Event()
@@ -85,7 +82,6 @@ export class SIAServer extends events.EventEmitter {
             }
             socket.write(ACK_SIA_BLOCK.toBuffer())
         }
-
         socket.on('data', handleData)
     }
 }
