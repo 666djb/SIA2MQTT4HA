@@ -142,9 +142,9 @@ export class Publisher {
             }
 
             // Set initial statuses for standard entities
-            await this.publishJSON("alarm_status", {status: "None yet", time: "00:00"})
-            await this.publishJSON("set_status", {status: "None yet", time: "00:00"})
-            await this.publishJSON("comms_test", {status: "None yet", time: "00:00"})
+            await this.publishJSON("alarm_status", {status: "None yet", time: "00:00"}, true)
+            await this.publishJSON("set_status", {status: "None yet", time: "00:00"}, true)
+            await this.publishJSON("comms_test", {status: "None yet", time: "00:00"}, true)
 
         } catch (ex) {
             console.log(ex)
