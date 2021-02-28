@@ -46,7 +46,7 @@
             "port": "int"
         },
         "zones": [
-            {"number": "str?", "name": "str?", "type": "str?"},
+            {"number": "str?", "name": "str?", "type": "str?"}
         ]
     }
 }
