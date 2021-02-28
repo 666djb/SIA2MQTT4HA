@@ -69,7 +69,7 @@ export class Publisher {
                 json_attributes_topic: `${this.config.baseTopic}/alarm_status`,
                 name: "Alarm Status",
                 unique_id: "sia2mqtt4ha_alarmpanel_alarm_status",
-                //value_template: '{{ value_json.status }}',
+                value_template: '{{ value_json.status }}',
                 icon: "mdi:bell"
             },
             {
@@ -79,7 +79,7 @@ export class Publisher {
                 json_attributes_topic: `${this.config.baseTopic}/comms_test`,
                 name: "Comms Status",
                 unique_id: "sia2mqtt4ha_alarmpanel_comms_test",
-                //value_template: '{{ value_json.status }}',
+                value_template: '{{ value_json.status }}',
                 icon: "mdi:check-network"
             },
             {
@@ -89,7 +89,7 @@ export class Publisher {
                 json_attributes_topic: `${this.config.baseTopic}/event`,
                 name: "Event",
                 unique_id: "sia2mqtt4ha_alarmpanel_event",
-                //value_template: '{{ value_json.code }}',
+                value_template: '{{ value_json.code }}',
                 icon: "mdi:flag"
             }
         ]
