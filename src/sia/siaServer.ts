@@ -61,7 +61,8 @@ export class SIAServer extends events.EventEmitter {
                         event.text = eventText
 
                         // Is this a zone event or a system event?
-                        if (event.zone.length > 0) {
+                        // RC and RO denote logged relay close and open events and with a Zone, they must be ZoneEvents
+                        if ((event.code == "RC" || event.code == "RO") && event.zone.length > 0) {
                             emitter.emit("ZoneEvent", event)
                         } else {
                             emitter.emit("SystemEvent", event)
