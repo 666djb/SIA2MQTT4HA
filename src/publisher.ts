@@ -181,7 +181,7 @@ export class Publisher {
             for (let entity in binaryEntities) {
                 let thisEntity = binaryEntities[entity]
                 let entityDiscoveryTopic = `${this.config.discoveryTopic}/${thisEntity.type}/${thisEntity.unique_id}/config`
-                await this.publishJSONdiscovery(entityDiscoveryTopic, zoneEntities[entity], true)
+                await this.publishJSONdiscovery(entityDiscoveryTopic, binaryEntities[entity], true)
             }
 
             // Set initial statuses for standard entities
