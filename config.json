@@ -1,6 +1,6 @@
 {
     "name": "SIA2MQTT4HA",
-    "version": "0.1.13",
+    "version": "0.1.14",
     "slug": "sia2mqtt4ha",
     "description": "Service that acts as an alarm receiving centre for Honeywell Flex alarm panels",
     "arch": [

@@ -1,0 +1,44 @@
+{
+	"mqtt": {
+		"brokerUrl": "mqtt://ha.home.djb.org.uk",
+		"discoveryTopic": "homeassistant",
+		"baseTopic": "sia2mqtt4ha",
+		"username": "mqtt",
+		"password": "mqtt"
+	},
+	"sia": {
+		"port": 10002
+	},
+	"zones": [
+		{
+			"number": "1001",
+			"name": "Front Door",
+			"type": "door"
+		},
+		{
+			"number": "1002",
+			"name": "Hall PIR",
+			"type": "pir"
+		},
+		{
+			"number": "1004",
+			"name": "Dining PIR",
+			"type": "pir"
+		},
+		{
+			"number": "1021",
+			"name": "Loft PIR",
+			"type": "pir"
+		},
+		{
+			"number": "1015",
+			"name": "Garage Door",
+			"type": "door"
+		},
+		{
+			"number": "1022",
+			"name": "Back Door",
+			"type": "door"
+		}
+	]
+}

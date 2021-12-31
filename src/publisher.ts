@@ -51,13 +51,14 @@ export class Publisher {
         // all which will appear in HA under $baseTopic and will have JSON formatted messages
         // published to them.
         // Todo: simplify this a bit - there's lots of duplication
-        let entities = [
+        let statusEntities = [
             {
                 availability: availability,
                 device: device,
                 state_topic: `${this.config.baseTopic}/set_status`,
                 json_attributes_topic: `${this.config.baseTopic}/set_status`,
                 name: "Set Status",
+                type: "sensor",
                 unique_id: "sia2mqtt4ha_alarmpanel_set_status",
                 value_template: '{{ value_json.status }}',
                 icon: "mdi:security"
@@ -68,6 +69,7 @@ export class Publisher {
                 state_topic: `${this.config.baseTopic}/alarm_status`,
                 json_attributes_topic: `${this.config.baseTopic}/alarm_status`,
                 name: "Alarm Status",
+                type: "sensor",
                 unique_id: "sia2mqtt4ha_alarmpanel_alarm_status",
                 value_template: '{{ value_json.status }}',
                 icon: "mdi:bell"
@@ -78,6 +80,7 @@ export class Publisher {
                 state_topic: `${this.config.baseTopic}/comms_test`,
                 json_attributes_topic: `${this.config.baseTopic}/comms_test`,
                 name: "Comms Status",
+                type: "sensor",
                 unique_id: "sia2mqtt4ha_alarmpanel_comms_test",
                 value_template: '{{ value_json.status }}',
                 icon: "mdi:check-network"
@@ -88,6 +91,7 @@ export class Publisher {
                 state_topic: `${this.config.baseTopic}/event`,
                 json_attributes_topic: `${this.config.baseTopic}/event`,
                 name: "Event",
+                type: "sensor",
                 unique_id: "sia2mqtt4ha_alarmpanel_event",
                 value_template: '{{ value_json.code }}',
                 icon: "mdi:flag"
@@ -113,6 +117,7 @@ export class Publisher {
                 state_topic: `${this.config.baseTopic}/zone_${i}`,
                 json_attributes_topic: `${this.config.baseTopic}/zone_${i}`,
                 name: this.zones[i].name,
+                type: "binary_sensor",
                 unique_id: "sia2mqtt4ha_alarmpanel_zone_" + i,
                 value_template: `{{ value_json.${template} }}`,
                 device_class: device_class,
@@ -123,21 +128,59 @@ export class Publisher {
             zoneEntities.push(zoneEntity)
         }
 
+        let binaryEntities = [
+            {
+                availability: availability,
+                device: device,
+                state_topic: `${this.config.baseTopic}/armed`,
+                json_attributes_topic: `${this.config.baseTopic}/armed`,
+                name: "Armed",
+                type: "binary_sensor",
+                unique_id: "sia2mqtt4ha_alarmpanel_armed",
+                value_template: '{{ value_json.state }}',
+                device_class: "None",
+                payload_off: false,
+                payload_on: true,
+                icon: "mdi:security"
+            },
+            {
+                availability: availability,
+                device: device,
+                state_topic: `${this.config.baseTopic}/alarm`,
+                json_attributes_topic: `${this.config.baseTopic}/alarm`,
+                name: "Alarm Condition",
+                type: "binary_sensor",
+                unique_id: "sia2mqtt4ha_alarmpanel_alarm",
+                value_template: '{{ value_json.state }}',
+                device_class: "None",
+                payload_off: false,
+                payload_on: true,
+                icon: "mdi:bell"
+            }
+        ]
+
         try {
             // Set our bridge availability to online
             await this.publish("bridge/availability", "online", true)
 
             // Advertise the presence of all standard entities so they can be discovered
-            for (let entity in entities) {
-                let thisEntity = entities[entity]
-                let entityDiscoveryTopic = `${this.config.discoveryTopic}/sensor/${thisEntity.unique_id}/config`
-                await this.publishJSONdiscovery(entityDiscoveryTopic, entities[entity], true)
+            for (let entity in statusEntities) {
+                let thisEntity = statusEntities[entity]
+                let entityDiscoveryTopic = `${this.config.discoveryTopic}/${thisEntity.type}/${thisEntity.unique_id}/config`
+                await this.publishJSONdiscovery(entityDiscoveryTopic, statusEntities[entity], true)
             }
 
             // Advertise the presence of all zone entities so they can be discovered
             for (let entity in zoneEntities) {
                 let thisEntity = zoneEntities[entity]
-                let entityDiscoveryTopic = `${this.config.discoveryTopic}/binary_sensor/${thisEntity.unique_id}/config`
+                let entityDiscoveryTopic = `${this.config.discoveryTopic}/${thisEntity.type}/${thisEntity.unique_id}/config`
+                await this.publishJSONdiscovery(entityDiscoveryTopic, zoneEntities[entity], true)
+            }
+
+            // Advertise the presence of all binary entities so they can be discovered
+            for (let entity in binaryEntities) {
+                let thisEntity = binaryEntities[entity]
+                let entityDiscoveryTopic = `${this.config.discoveryTopic}/${thisEntity.type}/${thisEntity.unique_id}/config`
                 await this.publishJSONdiscovery(entityDiscoveryTopic, zoneEntities[entity], true)
             }
 
@@ -145,6 +188,10 @@ export class Publisher {
             await this.publishJSON("alarm_status", {status: "None yet", time: "00:00"}, true)
             await this.publishJSON("set_status", {status: "None yet", time: "00:00"}, true)
             await this.publishJSON("comms_test", {status: "None yet", time: "00:00"}, true)
+
+            // Set initial statuses for binary entities
+            await this.publishJSON("armed", {status: false}, true)
+            await this.publishJSON("alarm", {status: false}, true)
 
         } catch (ex) {
             console.log(ex)
