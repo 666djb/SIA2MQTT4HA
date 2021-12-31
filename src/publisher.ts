@@ -138,7 +138,6 @@ export class Publisher {
                 type: "binary_sensor",
                 unique_id: "sia2mqtt4ha_alarmpanel_armed",
                 value_template: '{{ value_json.state }}',
-                device_class: "None",
                 payload_off: false,
                 payload_on: true,
                 icon: "mdi:security"
@@ -152,7 +151,6 @@ export class Publisher {
                 type: "binary_sensor",
                 unique_id: "sia2mqtt4ha_alarmpanel_alarm",
                 value_template: '{{ value_json.state }}',
-                device_class: "None",
                 payload_off: false,
                 payload_on: true,
                 icon: "mdi:bell"
