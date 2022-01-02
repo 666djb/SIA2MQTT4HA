@@ -1,28 +1,31 @@
 import { Event } from "../events/Event"
 import { Publisher } from "../publisher"
 
-const set = "set_status"
-const alarm = "alarm_status"
-const comms = "comms_test"
+// These are constants for the MQTT subtopics that events get published to
+const SET = "set_status"
+const ALARM = "alarm_status"
+const COMMS = "comms_test"
+const ARMED = "armed"
+const ALARMING = "alarm"
 
 const stateMap: { [state: string]: [string, string] } = {
-    "CA": ["Full Set", set],
-    "CL": ["Full Set", set],
-    "CG": ["Part Set", set],
-    "OA": ["Unset", set],
-    "OG": ["Unset", set],
-    "OP": ["Unset", set],
-    "BA": ["Alarm", alarm],
-    "BF": ["Alarm", alarm],
-    "BL": ["Alarm", alarm],
-    "BV": ["Alarm Confirm", alarm],
-    "FA": ["Fire", alarm],
-    "FV": ["Fire Confirm", alarm],
-    "PA": ["Panic", alarm],
-    "TA": ["Tamper", alarm],
-    "OR": ["None", alarm],
-    "RP": ["Automatic Test", comms],
-    "RX": ["Manual Test", comms]
+    "CA": ["Full Set", SET],
+    "CL": ["Full Set", SET],
+    "CG": ["Part Set", SET],
+    "OA": ["Unset", SET],
+    "OG": ["Unset", SET],
+    "OP": ["Unset", SET],
+    "BA": ["Alarm", ALARM],
+    "BF": ["Alarm", ALARM],
+    "BL": ["Alarm", ALARM],
+    "BV": ["Alarm Confirm", ALARM],
+    "FA": ["Fire", ALARM],
+    "FV": ["Fire Confirm", ALARM],
+    "PA": ["Panic", ALARM],
+    "TA": ["Tamper", ALARM],
+    "OR": ["None", ALARM],
+    "RP": ["Automatic Test", COMMS],
+    "RX": ["Manual Test", COMMS]
 }
 
 export async function handleSystemEvent(event: Event, publisher: Publisher): Promise<any> {
@@ -31,9 +34,58 @@ export async function handleSystemEvent(event: Event, publisher: Publisher): Pro
     if (state) {
         // If this is an unset (or manual test) event then we assert that the alarm condition is none
         if(event.code == "OA" || event.code == "OG" || event.code == "OP" || event.code == "RX") {
-            await publisher.publishJSON(alarm, {status: "None", time: event.time})
+            // Publish a status of None to the alarm subtopic
+            await publisher.publishJSON(ALARM, {status: "None", time: event.time})
         }
+        // Publish the status to the relevant subtopic
         await publisher.publishJSON(`${state[1]}`, {status: state[0], time: event.time})
+
+        let subTopic = undefined
+        let condition = undefined
+        let partSet = undefined
+        switch (state[0]){
+            case "Full Set":
+                subTopic = ARMED
+                condition = true
+                partSet = false
+                break
+            case "Part Set":
+                subTopic = ARMED
+                condition = true
+                partSet = true
+                break
+            case "Unset":
+                subTopic = ARMED
+                condition = false
+                partSet = false
+                break
+            case "Alarm":
+            case "Alarm Confirm":
+            case "Fire":
+            case "Fire Confirm":
+            case "Panic":
+            case "Tamper":
+                subTopic = ALARMING
+                condition = true
+                break
+            case "None":
+                subTopic = ALARMING
+                condition = false
+                break
+            default:
+                break
+        }
+        
+        // Publish the status to the relevant subtopic
+        let message = undefined
+        if(partSet){
+            message={status: condition, part: partSet}
+        }else{
+            message={status: condition}
+        }
+        
+        await publisher.publishJSON(subTopic, message)
+        
         return 
     }
 
