@@ -188,8 +188,8 @@ export class Publisher {
             await this.publishJSON("comms_test", {status: "None yet", time: "00:00"}, true)
 
             // Set initial statuses for binary entities
-            await this.publishJSON("armed", {state: false}, true)
-            await this.publishJSON("alarm", {state: false}, true)
+            await this.publishJSON("armed", {state: false})
+            await this.publishJSON("alarm", {state: false})
 
         } catch (ex) {
             console.log(ex)
