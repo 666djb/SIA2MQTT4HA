@@ -79,9 +79,9 @@ export async function handleSystemEvent(event: Event, publisher: Publisher): Pro
         // Publish the status to the relevant subtopic
         let message = undefined
         if(partSet){
-            message={status: condition, part: partSet}
+            message={state: condition, part: partSet}
         }else{
-            message={status: condition}
+            message={state: condition}
         }
         
         await publisher.publishJSON(subTopic, message)
