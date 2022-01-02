@@ -129,7 +129,7 @@ export class Publisher {
         }
 
         let binaryEntities = [
-            {
+            { // Entity representing system armed state (true, false)
                 availability: availability,
                 device: device,
                 state_topic: `${this.config.baseTopic}/armed`,
@@ -142,7 +142,20 @@ export class Publisher {
                 payload_on: true,
                 icon: "mdi:security"
             },
-            {
+            { // Entity representing part armed state (true, false)
+                availability: availability,
+                device: device,
+                state_topic: `${this.config.baseTopic}/armed`,
+                json_attributes_topic: `${this.config.baseTopic}/armed`,
+                name: "Part Armed",
+                type: "binary_sensor",
+                unique_id: "sia2mqtt4ha_alarmpanel_part_armed",
+                value_template: '{{ value_json.part }}',
+                payload_off: false,
+                payload_on: true,
+                icon: "mdi:security"
+            },
+            { // Entity representing alarm sounding state (true, false)
                 availability: availability,
                 device: device,
                 state_topic: `${this.config.baseTopic}/alarm`,
@@ -188,7 +201,7 @@ export class Publisher {
             await this.publishJSON("comms_test", {status: "None yet", time: "00:00"}, true)
 
             // Set initial statuses for binary entities
-            await this.publishJSON("armed", {state: false})
+            await this.publishJSON("armed", {state: false, part: false})
             await this.publishJSON("alarm", {state: false})
 
         } catch (ex) {
