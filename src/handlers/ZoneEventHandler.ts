@@ -25,10 +25,10 @@ export async function handleZoneEvent(event: Event, zones: Zones, publisher: Pub
     } else {
         switch(zones[parseInt(event.zone)].type.toUpperCase()){
             case "PIR":
-                message={occupancy: stateMap[event.code].state, time: event.time}
+                message={occupancy: stateMap[event.code].state} // , time: event.time
                 break
             case "DOOR":
-                message={contact: stateMap[event.code].state, time: event.time}
+                message={contact: stateMap[event.code].state} // , time: event.time
                 break
             default:
                 console.log("Type is unknown")

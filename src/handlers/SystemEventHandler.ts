@@ -6,7 +6,7 @@ const SET = "set_status"
 const ALARM = "alarm_status"
 const COMMS = "comms_test"
 const ARMED = "armed"
-const ALARMING = "alarm"
+const TRIGGERED = "triggered"
 
 const stateMap: { [state: string]: [string, string] } = {
     "CA": ["Full Set", SET],
@@ -35,10 +35,12 @@ export async function handleSystemEvent(event: Event, publisher: Publisher): Pro
         // If this is an unset (or manual test) event then we assert that the alarm condition is none
         if(event.code == "OA" || event.code == "OG" || event.code == "OP" || event.code == "RX") {
             // Publish a status of None to the alarm subtopic
-            await publisher.publishJSON(ALARM, {status: "None", time: event.time})
+            //await publisher.publishJSON(ALARM, {status: "None", time: event.time})
+            await publisher.publishJSON(ALARM, {status: "None"})
         }
         // Publish the status to the relevant subtopic
-        await publisher.publishJSON(`${state[1]}`, {status: state[0], time: event.time})
+        //await publisher.publishJSON(`${state[1]}`, {status: state[0], time: event.time})
+        await publisher.publishJSON(`${state[1]}`, {status: state[0]})
 
         let subTopic = undefined
         let condition = undefined
@@ -65,11 +67,11 @@ export async function handleSystemEvent(event: Event, publisher: Publisher): Pro
             case "Fire Confirm":
             case "Panic":
             case "Tamper":
-                subTopic = ALARMING
+                subTopic = TRIGGERED
                 condition = true
                 break
             case "None":
-                subTopic = ALARMING
+                subTopic = TRIGGERED
                 condition = false
                 break
             default:

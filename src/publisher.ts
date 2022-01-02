@@ -137,8 +137,7 @@ export class Publisher {
                 name: "Armed",
                 type: "binary_sensor",
                 unique_id: "sia2mqtt4ha_alarmpanel_armed",
-                //value_template: '{{ value_json.state }}',
-                value_template: '{{ {% if value_json.state == "off" %} Armed {% else %} Disarmed {% endif %} }}',
+                value_template: '{{ value_json.state }}',
                 payload_off: false,
                 payload_on: true,
                 icon: "mdi:security"
@@ -159,11 +158,11 @@ export class Publisher {
             { // Entity representing alarm sounding state (true, false)
                 availability: availability,
                 device: device,
-                state_topic: `${this.config.baseTopic}/alarm`,
-                json_attributes_topic: `${this.config.baseTopic}/alarm`,
-                name: "Alarm Condition",
+                state_topic: `${this.config.baseTopic}/triggered`,
+                json_attributes_topic: `${this.config.baseTopic}/triggered`,
+                name: "Triggered",
                 type: "binary_sensor",
-                unique_id: "sia2mqtt4ha_alarmpanel_alarm",
+                unique_id: "sia2mqtt4ha_alarmpanel_triggered",
                 value_template: '{{ value_json.state }}',
                 payload_off: false,
                 payload_on: true,
@@ -197,9 +196,10 @@ export class Publisher {
             }
 
             // Set initial statuses for standard entities
-            await this.publishJSON("alarm_status", {status: "None yet", time: "00:00"}, true)
-            await this.publishJSON("set_status", {status: "None yet", time: "00:00"}, true)
-            await this.publishJSON("comms_test", {status: "None yet", time: "00:00"}, true)
+            ///// Removed retain parameter
+            await this.publishJSON("alarm_status", {status: "None yet"})
+            await this.publishJSON("set_status", {status: "None yet"})
+            await this.publishJSON("comms_test", {status: "None yet"})
 
             // Set initial statuses for binary entities
             await this.publishJSON("armed", {state: false, part: false})

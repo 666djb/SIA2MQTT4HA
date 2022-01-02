@@ -5,7 +5,8 @@ import { handleZoneEvent } from "./handlers/ZoneEventHandler"
 import { Event } from "./events/Event"
 import { handleSystemEvent } from "./handlers/SystemEventHandler"
 
-const CONFIG_FILE = "/data/options.json"
+//const CONFIG_FILE = "/data/options.json"
+const CONFIG_FILE = "myoptions.json"
 
 const config = getConfig(CONFIG_FILE)
 
