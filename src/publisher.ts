@@ -137,7 +137,8 @@ export class Publisher {
                 name: "Armed",
                 type: "binary_sensor",
                 unique_id: "sia2mqtt4ha_alarmpanel_armed",
-                value_template: '{{ value_json.state }}',
+                //value_template: '{{ value_json.state }}',
+                value_template: '{{ {% if value_json.state == "off" %} Armed {% else %} Disarmed {% endif %} }}',
                 payload_off: false,
                 payload_on: true,
                 icon: "mdi:security"
