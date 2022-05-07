@@ -1,6 +1,6 @@
 {
   "name": "sia2mqtt4ha",
-  "version": "0.1.0",
+  "version": "0.1.21",
   "description": "",
   "main": "./dist/server.js",
   "scripts": {
@@ -12,6 +12,7 @@
   "license": "MIT",
   "devDependencies": {
     "@types/node": "^12.20.0",
+    "@types/ws": "^8.5.3",
     "typescript": "^3.4.5"
   },
   "repository": {
@@ -19,7 +20,7 @@
     "url": "https://github.com/666djb/sia2mqtt4ha.git"
   },
   "dependencies": {
-    "async-mqtt": "^2.3.0",
-    "mqtt": "^2.18.8"
+    "async-mqtt": "^2.6.2",
+    "mqtt": "^4.3.7"
   }
 }
