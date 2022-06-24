@@ -86,7 +86,7 @@ export async function handleSystemEvent(event: Event, publisher: Publisher): Pro
             message={state: condition}
         }
         
-        console.log(`${Date().toLocaleString()} SystemEvent: ${message}`)
+        console.log(`${Date().toLocaleString()} SystemEvent: ${state[0]}`)
         return await publisher.publishJSON(subTopic, message)
     }
 

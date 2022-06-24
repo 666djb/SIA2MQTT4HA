@@ -19,7 +19,7 @@ export class SIAServer extends events.EventEmitter {
     }
 
     listening() {
-        console.log('SIA server listening')
+        console.log(`${Date().toLocaleString()} SIA2MQTT4HA server listening`)
         this.emit("Ready")
     }
 
