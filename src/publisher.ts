@@ -21,12 +21,12 @@ export class Publisher {
         this.mqttClient = MQTT.connect(config.brokerUrl, options)
 
         this.mqttClient.on("connect", () => {
-            console.log("Connected to MQTT broker")
+            console.log(`${Date().toLocaleString()} Connected to MQTT broker`)
             this.publishOnline()
         })
 
         this.mqttClient.on("disconnect", () => {
-            console.log("Disconnected from MQTT broker")
+            console.log(`${Date().toLocaleString()} Disconnected from MQTT broker`)
         })
     }
 
@@ -214,7 +214,6 @@ export class Publisher {
         try {
             await this.mqttClient.publish(`${this.config.baseTopic}/${subTopic}`, data,
                 {retain: retain||false} as IClientPublishOptions)
-            //console.log("Published: " + `${this.config.baseTopic}/${subTopic}/${data}`)
         } catch (error) {
             console.log(error)
         }
@@ -224,7 +223,6 @@ export class Publisher {
         try {
             await this.mqttClient.publish(`${this.config.baseTopic}/${subTopic}`, JSON.stringify(data),
                 {retain: retain||false} as IClientPublishOptions)
-            //console.log("Published JSON: " + `${this.config.baseTopic}/${subTopic}/${JSON.stringify(data)}`)
         } catch (error) {
             console.log(error)
         }
@@ -234,7 +232,6 @@ export class Publisher {
         try {
             await this.mqttClient.publish(`${discoveryTopic}`, JSON.stringify(data),
                 {retain: retain||false} as IClientPublishOptions)
-            //console.log("Published Discovery: " + `${discoveryTopic}/${JSON.stringify(data)}`)
         } catch (error) {
             console.log(error)
         }

@@ -70,14 +70,14 @@ export class SIAServer extends events.EventEmitter {
                             emitter.emit("Event", event)
                         }
                     } else {
-                        console.log("Could not parse event, discarding")
+                        console.log(`${Date().toLocaleString()} Could not parse event, discarding`)
                     }
                     break
                 case FunctionCodes.end_of_data:
                     event = new Event()
                     break;
                 default:
-                    console.log("Unhandled funcCode:", FunctionCodes[block.funcCode])
+                    console.log(`${Date().toLocaleString()} Unhandled funcCode: ${FunctionCodes[block.funcCode]}`)
                     break
 
             }

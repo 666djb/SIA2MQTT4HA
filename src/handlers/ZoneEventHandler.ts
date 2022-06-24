@@ -16,11 +16,11 @@ export async function handleZoneEvent(event: Event, zones: Zones, publisher: Pub
 
     // Get zone name
     if (!zones[parseInt(event.zone)]) {
-        console.log("Zone does not exist in config")
+        console.log(`${Date().toLocaleString()} Zone does not exist in config`)
         return
     // Check if code is sane
     } else if (!stateMap[event.code]){
-        console.log("Invalid state")
+        console.log(`${Date().toLocaleString()} Invalid state`)
         return
     } else {
         switch(zones[parseInt(event.zone)].type.toUpperCase()){
@@ -31,9 +31,10 @@ export async function handleZoneEvent(event: Event, zones: Zones, publisher: Pub
                 message={contact: stateMap[event.code].state} // , time: event.time
                 break
             default:
-                console.log("Type is unknown")
+                console.log(`${Date().toLocaleString()} Type is unknown`)
                 return
         }
     }
+    console.log(`${Date().toLocaleString()} ZoneEvent: ${message}`)
     return await publisher.publishJSON(`zone_${event.zone}`, message)
 }

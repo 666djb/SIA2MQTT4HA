@@ -86,9 +86,8 @@ export async function handleSystemEvent(event: Event, publisher: Publisher): Pro
             message={state: condition}
         }
         
-        await publisher.publishJSON(subTopic, message)
-        
-        return 
+        console.log(`${Date().toLocaleString()} SystemEvent: ${message}`)
+        return await publisher.publishJSON(subTopic, message)
     }
 
     // If the state is not in the state map, just ignore it

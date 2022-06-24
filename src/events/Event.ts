@@ -12,15 +12,13 @@ export class Event {
     ) {}
 
     static parse(eventData: string): Event {
-        //console.log("eventData:", eventData)
-
         let event = new Event()
         let split = eventData.split("/")
 
         // Must have time and code
         // May have time, group modifier, peripheral modifier, user modifier, va modifier, SIA code, zone
         if (split.length < 2 || split[0].slice(0, 2) != "ti" || split[0].length != 7) {
-            console.log("No time or code")
+            console.log(`${Date().toLocaleString()} No time or code`)
             return
         } else {
             event.time = split[0].slice(2, 7)
@@ -42,14 +40,14 @@ export class Event {
                     event.vaModifier = split[i].slice(2)
                     break
                 default:
-                    console.log("Error: unknown modifier")
+                    console.log(`${Date().toLocaleString()} Error: unknown modifier`)
                     return null
             }
         }
 
         // For the code and optional zone
         if (split[split.length - 1].length < 2) {
-            console.log("Error: no code")
+            console.log(`${Date().toLocaleString()} Error: no code`)
             return null
         } else {
             let thisSplit = split[split.length - 1].slice(0, 2)
@@ -59,7 +57,7 @@ export class Event {
                     event.zone = split[split.length - 1].slice(2)
                 }
             } else {
-                console.log("Error: code")
+                console.log(`${Date().toLocaleString()} Error: code`)
                 return null
             }
         }
