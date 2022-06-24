@@ -35,6 +35,6 @@ export async function handleZoneEvent(event: Event, zones: Zones, publisher: Pub
                 return
         }
     }
-    console.log(`${Date().toLocaleString()} ZoneEvent: ${message}`)
+    console.log(`${Date().toLocaleString()} ZoneEvent: ${event.zone} ${stateMap[event.code].state}`)
     return await publisher.publishJSON(`zone_${event.zone}`, message)
 }

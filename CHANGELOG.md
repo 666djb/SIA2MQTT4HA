@@ -11,3 +11,7 @@
 ## 0.1.12 - 0.1.13
 
 - Fixed logic that determines whether an event is a ZoneEvent ensuring non-confirmed Intruder events trigger SystemEvents
+
+## 0.1.13 - 0.1.23
+
+- Various updates including changing logging to include date/time details and being more verbose

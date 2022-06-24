@@ -1,4 +1,5 @@
 myoptions.json
+user.json
 dist/
 node_modules/
 .node_modules/
