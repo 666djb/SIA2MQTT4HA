@@ -5,6 +5,8 @@ import { handleZoneEvent } from "./handlers/ZoneEventHandler"
 import { Event } from "./events/Event"
 import { handleSystemEvent } from "./handlers/SystemEventHandler"
 
+console.log(`${Date().toLocaleString()} Starting SIA2MQTT4HA`)
+
 const CONFIG_FILE = "/data/options.json"
 //const CONFIG_FILE = "myoptions.json"
 
@@ -13,7 +15,7 @@ const config = getConfig(CONFIG_FILE)
 // Parse zones once
 let zones = parseZones(config)
 if (zones == null) {
-    console.log("Couldn't parse zones, maybe there are none")
+    console.log(`${Date().toLocaleString()} Couldn't parse zones, maybe there are none`)
 }
 
 const publisher = new Publisher(config.mqtt, zones)
