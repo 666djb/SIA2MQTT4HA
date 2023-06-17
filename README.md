@@ -23,6 +23,10 @@ It should work with:
 
 https://www.security.honeywell.com/uk/All-Categories/intruder-detection-systems/control-panels/galaxy-flex-series
 
+# How to
+
+See [label](SIA2MQTT4HA-HowTo.pdf)
+
 # Running stand alone without Docker
 
 First convert the Typescript to Javascript: "tsc -p ./src"
@@ -42,4 +46,3 @@ Run: "docker run -v /config.yml:/config.yml -p 10002:10002 sia2mqtt4ha"
 * Describe Lovelace entities panel
 * Look at implementing encrypted event reporting from the panel
 * Look at SIA level 4 control and polling (I now know how to do some of this)
-* Write up alarm panel config information
