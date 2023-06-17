@@ -15,3 +15,7 @@
 ## 0.1.13 - 0.1.23
 
 - Various updates including changing logging to include date/time details and being more verbose
+
+## 0.1.23 - 0.1.25
+
+- Changed Comms Test sensor to force update even if no changes

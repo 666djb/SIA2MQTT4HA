@@ -87,7 +87,8 @@ export class Publisher {
                 type: "sensor",
                 unique_id: "sia2mqtt4ha_alarmpanel_comms_test",
                 value_template: '{{ value_json.status }}',
-                icon: "mdi:check-network"
+                icon: "mdi:check-network",
+                force_update: true
             },
             {
                 availability: availability,
