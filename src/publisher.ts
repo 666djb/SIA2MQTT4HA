@@ -201,7 +201,6 @@ export class Publisher {
             }
 
             // Set initial statuses for standard entities
-            ///// Removed retain parameter
             await this.publishJSON("alarm_status", {status: "None yet"})
             await this.publishJSON("set_status", {status: "None yet"})
             await this.publishJSON("comms_test", {status: "None yet"})
@@ -220,7 +219,6 @@ export class Publisher {
             await this.mqttClient.publish(`${this.config.baseTopic}/${subTopic}`, data,
                 {retain: retain||false} as IClientPublishOptions)
         } catch (error) {
-            //console.log(`${Date().toLocaleString()} publish() error: ${error}`)
             throw `publish() error ${error}`
         }
     }
@@ -230,7 +228,6 @@ export class Publisher {
             await this.mqttClient.publish(`${this.config.baseTopic}/${subTopic}`, JSON.stringify(data),
                 {retain: retain||false} as IClientPublishOptions)
         } catch (error) {
-            //console.log(`${Date().toLocaleString()} publishJSON() error: ${error}`)
             throw `publishJSON() error ${error}`
         }
     }
@@ -240,7 +237,6 @@ export class Publisher {
             await this.mqttClient.publish(`${discoveryTopic}`, JSON.stringify(data),
                 {retain: retain||false} as IClientPublishOptions)
         } catch (error) {
-            //console.log(`${Date().toLocaleString()} publishJSONdiscovery() error: ${error}`)
             throw `publishJSONdiscovery() error ${error}`
         }
     }
