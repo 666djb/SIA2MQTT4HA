@@ -33,19 +33,19 @@ export async function handleSystemEvent(event: Event, publisher: Publisher): Pro
 
     if (state) {
         // If this is an unset (or manual test) event then we assert that the alarm condition is none
-        if(event.code == "OA" || event.code == "OG" || event.code == "OP" || event.code == "RX") {
+        if (event.code == "OA" || event.code == "OG" || event.code == "OP" || event.code == "RX") {
             // Publish a status of None to the alarm subtopic
             //await publisher.publishJSON(ALARM, {status: "None", time: event.time})
-            await publisher.publishJSON(ALARM, {status: "None"})
+            await publisher.publishJSON(ALARM, { status: "None" })
         }
         // Publish the status to the relevant subtopic
         //await publisher.publishJSON(`${state[1]}`, {status: state[0], time: event.time})
-        await publisher.publishJSON(`${state[1]}`, {status: state[0]})
+        await publisher.publishJSON(`${state[1]}`, { status: state[0] })
 
         let subTopic = undefined
         let condition = undefined
         let partSet = undefined
-        switch (state[0]){
+        switch (state[0]) {
             case "Full Set":
                 subTopic = ARMED
                 condition = true
@@ -77,15 +77,16 @@ export async function handleSystemEvent(event: Event, publisher: Publisher): Pro
             default:
                 break
         }
-        
+
         // Publish the status to the relevant subtopic
-        let message = undefined
-        if(partSet){
-            message={state: condition, part: partSet}
-        }else{
-            message={state: condition}
-        }
-        
+        // let message = undefined
+        // if (partSet != undefined) {
+        //     message = { state: condition, part: partSet }
+        // } else {
+        //     message = { state: condition }
+        // }
+        let message = (partSet != undefined) ? { state: condition, part: partSet } : { state: condition }
+
         console.log(`${Date().toLocaleString()} SystemEvent: ${state[0]}`)
         return await publisher.publishJSON(subTopic, message)
     }

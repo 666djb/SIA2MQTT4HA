@@ -1,6 +1,6 @@
 {
 	"mqtt": {
-		"brokerUrl": "mqtt://ha.home.djb.org.uk",
+		"brokerUrl": "mqtt://core-mosquitto",
 		"discoveryTopic": "homeassistant",
 		"baseTopic": "sia2mqtt4ha",
 		"username": "mqtt",
