@@ -19,3 +19,7 @@
 ## 0.1.23 - 0.1.25
 
 - Changed Comms Test sensor to force update even if no changes
+
+## 0.1.25 - 0.1.26
+
+- Fixed Part Armed entity to report correct state
