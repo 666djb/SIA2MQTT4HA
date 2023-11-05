@@ -23,9 +23,12 @@ It should work with:
 
 https://www.security.honeywell.com/uk/All-Categories/intruder-detection-systems/control-panels/galaxy-flex-series
 
+# Changes
+See [Changelog](./CHANGELOG.md)
+
 # How to
 
-See [label](SIA2MQTT4HA-HowTo.pdf)
+See [Howto](./SIA2MQTT4HA-HowTo.pdf)
 
 # Running stand alone without Docker
 
