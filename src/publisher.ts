@@ -70,13 +70,14 @@ export class Publisher {
             {
                 availability: availability,
                 device: device,
-                state_topic: `${this.config.baseTopic}/alarm_status`,
-                json_attributes_topic: `${this.config.baseTopic}/alarm_status`,
-                name: "Alarm Status",
+                state_topic: `${this.config.baseTopic}/last_event`,
+                json_attributes_topic: `${this.config.baseTopic}/last_event`,
+                name: "Last Event",
                 type: "sensor",
-                unique_id: "sia2mqtt4ha_alarmpanel_alarm_status",
+                unique_id: "sia2mqtt4ha_alarmpanel_last_event",
                 value_template: '{{ value_json.status }}',
-                icon: "mdi:bell"
+                icon: "mdi:bell",
+                entity_category: "diagnostic"
             },
             {
                 availability: availability,
@@ -99,7 +100,8 @@ export class Publisher {
                 type: "sensor",
                 unique_id: "sia2mqtt4ha_alarmpanel_event",
                 value_template: '{{ value_json.code }}',
-                icon: "mdi:flag"
+                icon: "mdi:flag",
+                entity_category: "diagnostic"
             }
         ]
 
@@ -201,13 +203,13 @@ export class Publisher {
             }
 
             // Set initial statuses for standard entities
-            await this.publishJSON("alarm_status", {status: "None yet"})
-            await this.publishJSON("set_status", {status: "None yet"})
-            await this.publishJSON("comms_test", {status: "None yet"})
+            //await this.publishJSON("alarm_status", {status: "None yet"})
+            //await this.publishJSON("set_status", {status: "None yet"})
+            //await this.publishJSON("comms_test", {status: "None yet"})
 
             // Set initial statuses for binary entities
-            await this.publishJSON("armed", {state: false, part: false})
-            await this.publishJSON("alarm", {state: false})
+            //await this.publishJSON("armed", {state: false, part: false})
+            //await this.publishJSON("alarm", {state: false})
 
         } catch (ex) {
             console.log(`${Date().toLocaleString()} publishOnline() error: ${ex}`)

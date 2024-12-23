@@ -8,7 +8,6 @@ import { handleSystemEvent } from "./handlers/SystemEventHandler"
 console.log(`${Date().toLocaleString()} Starting SIA2MQTT4HA`)
 
 const CONFIG_FILE = "/data/options.json"
-//const CONFIG_FILE = "myoptions.json"
 
 const config = getConfig(CONFIG_FILE)
 

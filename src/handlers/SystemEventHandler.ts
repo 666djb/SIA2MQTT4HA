@@ -3,7 +3,7 @@ import { Publisher } from "../publisher"
 
 // These are constants for the MQTT subtopics that events get published to
 const SET = "set_status"
-const ALARM = "alarm_status"
+const LASTEVENT = "last_event"
 const COMMS = "comms_test"
 const ARMED = "armed"
 const TRIGGERED = "triggered"
@@ -15,17 +15,17 @@ const stateMap: { [state: string]: [string, string] } = {
     "OA": ["Unset", SET],
     "OG": ["Unset", SET],
     "OP": ["Unset", SET],
-    "BA": ["Alarm", ALARM],
-    "BF": ["Alarm", ALARM],
-    "BL": ["Alarm", ALARM],
-    "BV": ["Alarm Confirm", ALARM],
-    "FA": ["Fire", ALARM],
-    "FV": ["Fire Confirm", ALARM],
-    "PA": ["Panic", ALARM],
-    "TA": ["Tamper", ALARM],
-    "OR": ["None", ALARM],
-    "RP": ["Automatic Test", COMMS],
-    "RX": ["Manual Test", COMMS]
+    //"BA": ["Alarm", ALARM],
+    //"BF": ["Alarm", ALARM],
+    //"BL": ["Alarm", ALARM],
+    //"BV": ["Alarm Confirm", ALARM],
+    //"FA": ["Fire", ALARM],
+    //"FV": ["Fire Confirm", ALARM],
+    //"PA": ["Panic", ALARM],
+    //"TA": ["Tamper", ALARM],
+    //"OR": ["None", ALARM],
+    "RP": ["Ok", COMMS],
+    "RX": ["Ok", COMMS]
 }
 
 export async function handleSystemEvent(event: Event, publisher: Publisher): Promise<any> {
@@ -33,12 +33,19 @@ export async function handleSystemEvent(event: Event, publisher: Publisher): Pro
 
     if (state) {
         // If this is an unset (or manual test) event then we assert that the alarm condition is none
-        if (event.code == "OA" || event.code == "OG" || event.code == "OP" || event.code == "RX") {
+        //if (event.code == "OA" || event.code == "OG" || event.code == "OP" || event.code == "RX") {
             // Publish a status of None to the alarm subtopic
-            await publisher.publishJSON(ALARM, { status: "None" })
-        }
+        //    await publisher.publishJSON(ALARM, { status: "None" })
+        //}
+        
+        // Publish the event text field
+        await publisher.publishJSON(LASTEVENT, { status: event.text }, true)
+        await publisher.publishJSON(LASTEVENT, event, true)
+
         // Publish the status to the relevant subtopic
+        // TODO not sure we need this. We could just identify comms and publish that
         await publisher.publishJSON(`${state[1]}`, { status: state[0] })
+        // Above publishes to alarm_status, comms_test, set_status
 
         let subTopic = undefined
         let condition = undefined
@@ -76,7 +83,7 @@ export async function handleSystemEvent(event: Event, publisher: Publisher): Pro
                 break
         }
 
-        // Publish the status to the relevant subtopic
+        // Publish the status to the relevant subtopic (e.g. to "armed" or "triggered")
         let message = (partSet != undefined) ? { state: condition, part: partSet } : { state: condition }
         console.log(`${Date().toLocaleString()} SystemEvent: ${state[0]}`)
         return await publisher.publishJSON(subTopic, message)
