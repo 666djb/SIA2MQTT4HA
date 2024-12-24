@@ -76,7 +76,7 @@ export class Publisher {
                 type: "sensor",
                 unique_id: "sia2mqtt4ha_alarmpanel_last_event",
                 value_template: '{{ value_json.status }}',
-                icon: "mdi:bell",
+                icon: "mdi:comment",
                 platform: "sensor"
             },
             {

@@ -1,98 +1,199 @@
 import { Event } from "../events/Event"
 import { Publisher } from "../publisher"
 
-// These are constants for the MQTT subtopics that events get published to
-const SET = "set_status"
-const LASTEVENT = "last_event"
-const COMMS = "comms_test"
-const ARMED = "armed"
-const TRIGGERED = "triggered"
-
-const stateMap: { [state: string]: [string, string] } = {
-    "CA": ["Full Set", SET],
-    "CL": ["Full Set", SET],
-    "CG": ["Part Set", SET],
-    "OA": ["Unset", SET],
-    "OG": ["Unset", SET],
-    "OP": ["Unset", SET],
-    //"BA": ["Alarm", ALARM],
-    //"BF": ["Alarm", ALARM],
-    //"BL": ["Alarm", ALARM],
-    //"BV": ["Alarm Confirm", ALARM],
-    //"FA": ["Fire", ALARM],
-    //"FV": ["Fire Confirm", ALARM],
-    //"PA": ["Panic", ALARM],
-    //"TA": ["Tamper", ALARM],
-    //"OR": ["None", ALARM],
-    "RP": ["Ok", COMMS],
-    "RX": ["Ok", COMMS]
+// These are the MQTT subtopics that events get published to
+enum subTopics {
+    SET = "set_status",
+    LASTEVENT = "last_event",
+    COMMS = "comms_test",
+    ARMED = "armed",
+    TRIGGERED = "triggered"
 }
 
-export async function handleSystemEvent(event: Event, publisher: Publisher): Promise<any> {
-    let state = stateMap[event.code]
+enum setState {
+    UNSET = "Unset",
+    FULL = "Full",
+    PART = "Part"
+}
 
-    if (state) {
-        // If this is an unset (or manual test) event then we assert that the alarm condition is none
-        //if (event.code == "OA" || event.code == "OG" || event.code == "OP" || event.code == "RX") {
-            // Publish a status of None to the alarm subtopic
-        //    await publisher.publishJSON(ALARM, { status: "None" })
-        //}
-        
-        // Publish the event text field
-        await publisher.publishJSON(LASTEVENT, { status: event.text }, true)
-        //await publisher.publishJSON(LASTEVENT, event, true)
+interface ParsedEvent {
+    code: string,
+    time: string,
+    text: string,
+    setState?: setState,
+    alarmState?: boolean,
+    commsState?: boolean
+}
 
-        // Publish the status to the relevant subtopic
-        // TODO not sure we need this. We could just identify comms and publish that
-        await publisher.publishJSON(`${state[1]}`, { status: state[0] })
-        // Above publishes to alarm_status, comms_test, set_status
+function parseSystemEvent(event: Event): ParsedEvent {
+    let parsedEvent: ParsedEvent = {
+        code: event.code,
+        time: event.time,
+        text: ""
+    }
 
-        let subTopic = undefined
-        let condition = undefined
-        let partSet = undefined
-        switch (state[0]) {
-            case "Full Set":
-                subTopic = ARMED
-                condition = true
-                partSet = false
+    switch (event.code) {
+        // Unset events
+        case "OA":
+        case "OG":
+        case "OP":
+            parsedEvent.text = "Unset"
+            parsedEvent.setState = setState.UNSET
+            parsedEvent.alarmState = false
+            break
+        // Set events
+        case "CA":
+        case "CL":
+            parsedEvent.text = "Full Set"
+            parsedEvent.setState = setState.FULL
+            parsedEvent.alarmState = false
+            break
+        case "CG":
+            parsedEvent.text = "Part Set"
+            parsedEvent.setState = setState.PART
+            parsedEvent.alarmState = false
+            break
+        // Cancel / reset events
+        case "BC":
+        case "OR":
+            parsedEvent.text = "Unset"
+            parsedEvent.setState = setState.UNSET
+            parsedEvent.alarmState = false
+            break
+        // Triggered events
+        case "BV":
+            parsedEvent.text = "Confirmed Alarm"
+            parsedEvent.alarmState = true
+            break
+        // Intruder alarm events
+        case "BA":
+        case "BF":
+        case "BL":
+        case "CT": // Entry Timeout
+            parsedEvent.text = "Alarm Triggered"
+            parsedEvent.alarmState = true
+            break
+        // Sensor trouble
+        case "BT":
+            parsedEvent.text = "Sensor Fault"
+            break
+        // Sensor restore
+        case "BJ":
+            parsedEvent.text = "Sensor Restored"
+            break
+        case "AT":
+            parsedEvent.text = "Mains Fault"
+            break
+        case "AR":
+            parsedEvent.text = "Mains Restored"
+            break
+        case "YT":
+            parsedEvent.text = "Battery Fault"
+            break
+        case "YR":
+            parsedEvent.text = "Battery Restored"
+            break
+        case "FA":
+            parsedEvent.text = "Fire Alarm Triggered"
+            parsedEvent.alarmState = true
+            break
+        case "FV":
+            parsedEvent.text = "Fire Alarm Confirmed"
+            parsedEvent.alarmState = true
+            break
+        // Comms events
+        case "LT":
+        case "YC":
+            parsedEvent.text = "Comms Fault"
+            parsedEvent.commsState = false
+            break
+        case "LR":
+        case "YK":
+            parsedEvent.text = "Comms Restored"
+            parsedEvent.commsState = true
+            break
+        // PA events
+        case "PA":
+            parsedEvent.text = "PA Triggered"
+            parsedEvent.alarmState = true
+            break
+        case "PR":
+            parsedEvent.text = "PA Restored"
+            parsedEvent.alarmState = false
+            break
+        // System boot up
+        case "RR":
+            parsedEvent.text = "System Boot"
+            parsedEvent.setState = setState.UNSET
+            parsedEvent.alarmState = false
+            break
+        case "TA":
+            parsedEvent.text = "Tamper Fault"
+            break
+        case "RX":
+            parsedEvent.text = "Manual Comms Test"
+            parsedEvent.commsState = true
+            break
+        case "RP":
+            parsedEvent.text = "Automatic Comms Test"
+            parsedEvent.commsState = true
+            break
+        case "LB":
+            parsedEvent.text = "Engineer Access"
+            break
+        case "LX":
+            parsedEvent.text = "Engineer Exit"
+            break
+        case "BR":
+        case "CR":
+            // Ignore these events
+            return
+        default:
+            parsedEvent.text = "Unknown Event"
+    }
+}
+
+export async function handleSystemEvent(rawEvent: Event, publisher: Publisher): Promise<any> {
+    let event=parseSystemEvent(rawEvent)
+    console.log(`event is: ${event}`)
+
+    // If an event has triggered the alarm
+    if(event.alarmState===true){
+        await publisher.publishJSON(subTopics.TRIGGERED, { state: true })
+    }
+
+    // If an event has set or unset the alarm
+    if(event.setState){
+        //let message = (partSet != undefined) ? { state: condition, part: partSet } : { state: condition }
+        switch(event.setState){
+            case setState.UNSET:
+                await publisher.publishJSON(subTopics.SET, { state: false })
                 break
-            case "Part Set":
-                subTopic = ARMED
-                condition = true
-                partSet = true
+            case setState.FULL:
+                await publisher.publishJSON(subTopics.SET, { state: true, part: false })
                 break
-            case "Unset":
-                subTopic = ARMED
-                condition = false
-                partSet = false
-                break
-            case "Alarm":
-            case "Alarm Confirm":
-            case "Fire":
-            case "Fire Confirm":
-            case "Panic":
-            case "Tamper":
-                subTopic = TRIGGERED
-                condition = true
-                break
-            case "None":
-                subTopic = TRIGGERED
-                condition = false
+            case setState.PART:
+                await publisher.publishJSON(subTopics.SET, { state: true, part: true })
                 break
             default:
-                break
-        }
-
-        // Publish the status to the relevant subtopic (e.g. to "armed" or "triggered")
-        let message = (partSet != undefined) ? { state: condition, part: partSet } : { state: condition }
-        console.log(`${Date().toLocaleString()} SystemEvent: ${state[0]}`)
-        return await publisher.publishJSON(subTopic, message)
+                console.log(`${Date().toLocaleString()} Logic Error event.setState in handleSystemEvent()}`)
+        } 
     }
-    // If the state is not in the state map, just ignore it
+
+    // If an event is comms related
+    if(event.commsState){
+        let commsStatus = event.commsState == true ? "Ok" : "Failed"
+        await publisher.publishJSON(subTopics.COMMS, { status: commsStatus })
+    }
+
+    // Publish each event to the last event topic
+    // TODO can we publish the entire object here and have the front end just parse the event.text field?
+    await publisher.publishJSON(subTopics.LASTEVENT, { status: event.text })
 }
 
-export async function sendInitialSystemEventState(publisher: Publisher): Promise<any>{
-    await publisher.publishJSON(LASTEVENT, {status: "Waiting"}, true)
-    await publisher.publishJSON(COMMS, {status: "Waiting"}, true)
-    await publisher.publishJSON(SET, {status: "Waiting"}, true)
+export async function sendInitialSystemEventState(publisher: Publisher): Promise<any> {
+    await publisher.publishJSON(subTopics.LASTEVENT, { status: "Waiting" })
+    await publisher.publishJSON(subTopics.COMMS, { status: "Waiting" })
+    await publisher.publishJSON(subTopics.SET, { status: "Waiting" })
+    await publisher.publishJSON(subTopics.TRIGGERED, { status: false })
 }
