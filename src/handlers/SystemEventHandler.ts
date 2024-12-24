@@ -3,10 +3,10 @@ import { Publisher } from "../publisher"
 
 // These are the MQTT subtopics that events get published to
 enum subTopics {
-    SET = "set_status",
+    SET = "set_status", // this topic uses just text e.g. Unset, Full Set, Part Set
     LASTEVENT = "last_event",
     COMMS = "comms_test",
-    ARMED = "armed",
+    ARMED = "armed", // this topic users and object of form {}
     TRIGGERED = "triggered"
 }
 
@@ -166,16 +166,16 @@ export async function handleSystemEvent(rawEvent: Event, publisher: Publisher): 
 
     // If an event has set or unset the alarm
     if(event.setState){
-        //let message = (partSet != undefined) ? { state: condition, part: partSet } : { state: condition }
-        switch(event.setState){
+        await publisher.publishJSON(subTopics.SET, { status: event.setState }) // Set the text based topic
+        switch(event.setState){ // Set the extended value based topic
             case setState.UNSET:
-                await publisher.publishJSON(subTopics.SET, { state: false })
+                await publisher.publishJSON(subTopics.ARMED, { state: false })
                 break
             case setState.FULL:
-                await publisher.publishJSON(subTopics.SET, { state: true, part: false })
+                await publisher.publishJSON(subTopics.ARMED, { state: true, part: false })
                 break
             case setState.PART:
-                await publisher.publishJSON(subTopics.SET, { state: true, part: true })
+                await publisher.publishJSON(subTopics.ARMED, { state: true, part: true })
                 break
             default:
                 console.log(`${Date().toLocaleString()} Logic Error event.setState in handleSystemEvent()}`)
@@ -197,5 +197,6 @@ export async function sendInitialSystemEventState(publisher: Publisher): Promise
     await publisher.publishJSON(subTopics.LASTEVENT, { status: "Waiting" })
     await publisher.publishJSON(subTopics.COMMS, { status: "Waiting" })
     await publisher.publishJSON(subTopics.SET, { status: "Waiting" })
-    await publisher.publishJSON(subTopics.TRIGGERED, { status: false })
+    await publisher.publishJSON(subTopics.TRIGGERED, { state: false })
+    await this.publishJSON(subTopics.ARMED, {state: false, part: false})
 }
