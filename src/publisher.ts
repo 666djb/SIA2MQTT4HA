@@ -92,6 +92,21 @@ export class Publisher {
                 platform: "sensor",
                 force_update: true
             },
+            { // Entity representing alarm sounding state (true, false)
+                availability: availability,
+                device: device,
+                state_topic: `${this.config.baseTopic}/triggered`,
+                json_attributes_topic: `${this.config.baseTopic}/triggered`,
+                name: "Triggered",
+                type: "binary_sensor",
+                unique_id: "sia2mqtt4ha_alarmpanel_triggered",
+                value_template: '{{ value_json.state }}',
+                payload_off: false,
+                payload_on: true,
+                icon: "mdi:bell",
+                platform: "binary_sensor"//,
+                //entity_category: "diagnostic"
+            },
             {
                 availability: availability,
                 device: device,
@@ -138,53 +153,53 @@ export class Publisher {
             zoneEntities.push(zoneEntity)
         }
 
-        let binaryEntities = [
-            { // Entity representing system armed state (true, false)
-                availability: availability,
-                device: device,
-                state_topic: `${this.config.baseTopic}/armed`,
-                json_attributes_topic: `${this.config.baseTopic}/armed`,
-                name: "Armed",
-                type: "binary_sensor",
-                unique_id: "sia2mqtt4ha_alarmpanel_armed",
-                value_template: '{{ value_json.state }}',
-                payload_off: false,
-                payload_on: true,
-                icon: "mdi:security",
-                platform: "binary_sensor",
-                entity_category: "diagnostic"
-            },
-            { // Entity representing part armed state (true, false)
-                availability: availability,
-                device: device,
-                state_topic: `${this.config.baseTopic}/armed`,
-                json_attributes_topic: `${this.config.baseTopic}/armed`,
-                name: "Part Armed",
-                type: "binary_sensor",
-                unique_id: "sia2mqtt4ha_alarmpanel_part_armed",
-                value_template: '{{ value_json.part }}',
-                payload_off: false,
-                payload_on: true,
-                icon: "mdi:security",
-                platform: "binary_sensor",
-                entity_category: "diagnostic"
-            },
-            { // Entity representing alarm sounding state (true, false)
-                availability: availability,
-                device: device,
-                state_topic: `${this.config.baseTopic}/triggered`,
-                json_attributes_topic: `${this.config.baseTopic}/triggered`,
-                name: "Triggered",
-                type: "binary_sensor",
-                unique_id: "sia2mqtt4ha_alarmpanel_triggered",
-                value_template: '{{ value_json.state }}',
-                payload_off: false,
-                payload_on: true,
-                icon: "mdi:bell",
-                platform: "binary_sensor",
-                entity_category: "diagnostic"
-            }
-        ]
+        // let binaryEntities = [
+        //     { // Entity representing system armed state (true, false)
+        //         availability: availability,
+        //         device: device,
+        //         state_topic: `${this.config.baseTopic}/armed`,
+        //         json_attributes_topic: `${this.config.baseTopic}/armed`,
+        //         name: "Armed",
+        //         type: "binary_sensor",
+        //         unique_id: "sia2mqtt4ha_alarmpanel_armed",
+        //         value_template: '{{ value_json.state }}',
+        //         payload_off: false,
+        //         payload_on: true,
+        //         icon: "mdi:security",
+        //         platform: "binary_sensor",
+        //         entity_category: "diagnostic"
+        //     },
+        //     { // Entity representing part armed state (true, false)
+        //         availability: availability,
+        //         device: device,
+        //         state_topic: `${this.config.baseTopic}/armed`,
+        //         json_attributes_topic: `${this.config.baseTopic}/armed`,
+        //         name: "Part Armed",
+        //         type: "binary_sensor",
+        //         unique_id: "sia2mqtt4ha_alarmpanel_part_armed",
+        //         value_template: '{{ value_json.part }}',
+        //         payload_off: false,
+        //         payload_on: true,
+        //         icon: "mdi:security",
+        //         platform: "binary_sensor",
+        //         entity_category: "diagnostic"
+        //     },
+        //     { // Entity representing alarm sounding state (true, false)
+        //         availability: availability,
+        //         device: device,
+        //         state_topic: `${this.config.baseTopic}/triggered`,
+        //         json_attributes_topic: `${this.config.baseTopic}/triggered`,
+        //         name: "Triggered",
+        //         type: "binary_sensor",
+        //         unique_id: "sia2mqtt4ha_alarmpanel_triggered",
+        //         value_template: '{{ value_json.state }}',
+        //         payload_off: false,
+        //         payload_on: true,
+        //         icon: "mdi:bell",
+        //         platform: "binary_sensor",
+        //         entity_category: "diagnostic"
+        //     }
+        // ]
 
         try {
             // Set our bridge availability to online
@@ -205,11 +220,11 @@ export class Publisher {
             }
 
             // Advertise the presence of all binary entities so they can be discovered
-            for (let entity in binaryEntities) {
-                let thisEntity = binaryEntities[entity]
-                let entityDiscoveryTopic = `${this.config.discoveryTopic}/${thisEntity.type}/${thisEntity.unique_id}/config`
-                await this.publishJSONdiscovery(entityDiscoveryTopic, binaryEntities[entity], true)
-            }
+            // for (let entity in binaryEntities) {
+            //     let thisEntity = binaryEntities[entity]
+            //     let entityDiscoveryTopic = `${this.config.discoveryTopic}/${thisEntity.type}/${thisEntity.unique_id}/config`
+            //     await this.publishJSONdiscovery(entityDiscoveryTopic, binaryEntities[entity], true)
+            // }
         } catch (error) {
             console.log(`${Date().toLocaleString()} publishOnline() error: ${error}`)
         }

@@ -3,10 +3,9 @@ import { Publisher } from "../publisher"
 
 // These are the MQTT subtopics that events get published to
 enum subTopics {
-    SET = "set_status", // this topic uses just text e.g. Unset, Full Set, Part Set
+    SET = "set_status",
     LASTEVENT = "last_event",
     COMMS = "comms_test",
-    ARMED = "armed", // this topic users and object of form {}
     TRIGGERED = "triggered"
 }
 
@@ -151,45 +150,56 @@ function parseSystemEvent(event: Event): ParsedEvent {
         default:
             parsedEvent.text = "Unknown Event"
     }
-
     return parsedEvent
 }
 
 export async function handleSystemEvent(rawEvent: Event, publisher: Publisher): Promise<any> {
     let event=parseSystemEvent(rawEvent)
-    console.log(`event is: ${event}`)
-
+    
     // If an event has triggered the alarm
-    if(event.alarmState && event.alarmState == true){
-        await publisher.publishJSON(subTopics.TRIGGERED, { state: true })
+    if(event.alarmState){
+        await publisher.publishJSON(subTopics.TRIGGERED, {
+            state: event.alarmState,
+            time: event.time,
+
+        })
     }
 
     // If an event has set or unset the alarm
     if(event.setState){
-        await publisher.publishJSON(subTopics.SET, { status: event.setState }) // Set the text based topic
-        switch(event.setState){ // Set the extended value based topic
-            case setState.UNSET:
-                await publisher.publishJSON(subTopics.ARMED, { state: false })
-                break
-            case setState.FULL:
-                await publisher.publishJSON(subTopics.ARMED, { state: true, part: false })
-                break
-            case setState.PART:
-                await publisher.publishJSON(subTopics.ARMED, { state: true, part: true })
-                break
-            default:
-                console.log(`${Date().toLocaleString()} Logic Error event.setState in handleSystemEvent()}`)
-        } 
+        await publisher.publishJSON(subTopics.SET,
+            {
+                status: event.setState,
+                time: event.time,
+                fullSet: event.setState == setState.FULL,
+                partSet: event.setState == setState.PART
+            })
+        // switch(event.setState){ // Set the extended value based topic
+        //     case setState.UNSET:
+        //         await publisher.publishJSON(subTopics.ARMED, { state: false })
+        //         break
+        //     case setState.FULL:
+        //         await publisher.publishJSON(subTopics.ARMED, { state: true, part: false })
+        //         break
+        //     case setState.PART:
+        //         await publisher.publishJSON(subTopics.ARMED, { state: true, part: true })
+        //         break
+        //     default:
+        //         console.log(`${Date().toLocaleString()} Logic Error event.setState in handleSystemEvent()}`)
+        // } 
     }
 
     // If an event is comms related
     if(event.commsState){
-        let commsStatus = event.commsState == true ? "Ok" : "Failed"
-        await publisher.publishJSON(subTopics.COMMS, { status: commsStatus })
+        await publisher.publishJSON(subTopics.COMMS,
+            {
+                status: event.commsState == true ? "Ok" : "Failed",
+                time: event.time,
+                ok: event.commsState
+            })
     }
 
     // Publish each event to the last event topic
-    // TODO can we publish the entire object here and have the front end just parse the event.text field?
     await publisher.publishJSON(subTopics.LASTEVENT, { status: event.text })
 }
 
@@ -198,5 +208,4 @@ export async function sendInitialSystemEventState(publisher: Publisher): Promise
     await publisher.publishJSON(subTopics.COMMS, { status: "Waiting" })
     await publisher.publishJSON(subTopics.SET, { status: "Waiting" })
     await publisher.publishJSON(subTopics.TRIGGERED, { state: false })
-    await publisher.publishJSON(subTopics.ARMED, {state: false, part: false})
 }

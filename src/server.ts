@@ -40,7 +40,7 @@ siaServer.on("SystemEvent", async function (event: Event) {
 // This is used for all events
 // it publishes all raw event data to MQTT $baseTopic/event
 siaServer.on("Event", async function (event: Event) {
-    await publisher.publishJSON("event", event, false)
+    await publisher.publishJSON("event", event)
 })
 
 async function sendInitialStates(publisher: Publisher){
