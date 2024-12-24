@@ -40,7 +40,7 @@ export async function handleSystemEvent(event: Event, publisher: Publisher): Pro
         
         // Publish the event text field
         await publisher.publishJSON(LASTEVENT, { status: event.text }, true)
-        await publisher.publishJSON(LASTEVENT, event, true)
+        //await publisher.publishJSON(LASTEVENT, event, true)
 
         // Publish the status to the relevant subtopic
         // TODO not sure we need this. We could just identify comms and publish that
@@ -89,4 +89,8 @@ export async function handleSystemEvent(event: Event, publisher: Publisher): Pro
         return await publisher.publishJSON(subTopic, message)
     }
     // If the state is not in the state map, just ignore it
+}
+
+export async function sendInitialSystemEventState(publisher: Publisher): Promise<any>{
+    await publisher.publishJSON(LASTEVENT, {status: "Waiting"}, true)
 }

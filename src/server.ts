@@ -3,7 +3,7 @@ import { getConfig, parseZones } from "./config"
 import { SIAServer } from "./sia/siaServer"
 import { handleZoneEvent } from "./handlers/ZoneEventHandler"
 import { Event } from "./events/Event"
-import { handleSystemEvent } from "./handlers/SystemEventHandler"
+import { handleSystemEvent, sendInitialSystemEventState } from "./handlers/SystemEventHandler"
 
 console.log(`${Date().toLocaleString()} Starting SIA2MQTT4HA`)
 
@@ -19,6 +19,9 @@ if (zones == null) {
 
 const publisher = new Publisher(config.mqtt, zones)
 const siaServer = new SIAServer(config.sia)
+
+// Publish initial values
+sendInitialStates(publisher)
 
 // This is used only for events that contain zone details
 // it publishes to MQTT %baseTopic/zone
@@ -39,3 +42,11 @@ siaServer.on("SystemEvent", async function (event: Event) {
 siaServer.on("Event", async function (event: Event) {
     await publisher.publishJSON("event", event, false)
 })
+
+async function sendInitialStates(publisher: Publisher){
+    try{
+        await sendInitialSystemEventState(publisher)
+    } catch (error) {
+        console.log(`Error publishing initial states`)
+    }
+}
