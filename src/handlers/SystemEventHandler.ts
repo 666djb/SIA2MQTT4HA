@@ -93,4 +93,6 @@ export async function handleSystemEvent(event: Event, publisher: Publisher): Pro
 
 export async function sendInitialSystemEventState(publisher: Publisher): Promise<any>{
     await publisher.publishJSON(LASTEVENT, {status: "Waiting"}, true)
+    await publisher.publishJSON(COMMS, {status: "Waiting"}, true)
+    await publisher.publishJSON(SET, {status: "Waiting"}, true)
 }
