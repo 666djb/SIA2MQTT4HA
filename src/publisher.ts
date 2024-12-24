@@ -78,8 +78,8 @@ export class Publisher {
                 unique_id: "sia2mqtt4ha_alarmpanel_last_event",
                 value_template: '{{ value_json.status }}',
                 icon: "mdi:bell",
-                platform: "sensor"//,
-                //entity_category: "diagnostic"
+                platform: "sensor",
+                entity_category: "diagnostic"
             },
             {
                 availability: availability,
@@ -104,8 +104,8 @@ export class Publisher {
                 unique_id: "sia2mqtt4ha_alarmpanel_event",
                 value_template: '{{ value_json.code }}',
                 icon: "mdi:flag",
-                platform: "sensor"//,
-                //entity_category: "diagnostic"
+                platform: "sensor",
+                entity_category: "diagnostic"
             }
         ]
 
