@@ -198,5 +198,5 @@ export async function sendInitialSystemEventState(publisher: Publisher): Promise
     await publisher.publishJSON(subTopics.COMMS, { status: "Waiting" })
     await publisher.publishJSON(subTopics.SET, { status: "Waiting" })
     await publisher.publishJSON(subTopics.TRIGGERED, { state: false })
-    await this.publishJSON(subTopics.ARMED, {state: false, part: false})
+    await publisher.publishJSON(subTopics.ARMED, {state: false, part: false})
 }

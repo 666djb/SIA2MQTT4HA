@@ -210,16 +210,6 @@ export class Publisher {
                 let entityDiscoveryTopic = `${this.config.discoveryTopic}/${thisEntity.type}/${thisEntity.unique_id}/config`
                 await this.publishJSONdiscovery(entityDiscoveryTopic, binaryEntities[entity], true)
             }
-
-            // Set initial statuses for standard entities
-            //await this.publishJSON("alarm_status", {status: "None yet"})
-            //await this.publishJSON("set_status", {status: "None yet"})
-            //await this.publishJSON("comms_test", {status: "None yet"})
-
-            // Set initial statuses for binary entities
-            //await this.publishJSON("armed", {state: false, part: false})
-            //await this.publishJSON("alarm", {state: false})
-
         } catch (error) {
             console.log(`${Date().toLocaleString()} publishOnline() error: ${error}`)
         }
