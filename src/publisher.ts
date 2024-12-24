@@ -25,7 +25,7 @@ export class Publisher {
             this.publishOnline()
         })
 
-        this.mqttClient.on("recconnect", () => {
+        this.mqttClient.on("reconnect", () => {
             console.log(`${Date().toLocaleString()} Reconnecting to MQTT broker`)
         })
 
@@ -65,7 +65,8 @@ export class Publisher {
                 type: "sensor",
                 unique_id: "sia2mqtt4ha_alarmpanel_set_status",
                 value_template: '{{ value_json.status }}',
-                icon: "mdi:security"
+                icon: "mdi:security",
+                platform: "sensor"
             },
             {
                 availability: availability,
@@ -76,7 +77,8 @@ export class Publisher {
                 type: "sensor",
                 unique_id: "sia2mqtt4ha_alarmpanel_last_event",
                 value_template: '{{ value_json.status }}',
-                icon: "mdi:bell"//,
+                icon: "mdi:bell",
+                platform: "sensor"//,
                 //entity_category: "diagnostic"
             },
             {
@@ -89,6 +91,7 @@ export class Publisher {
                 unique_id: "sia2mqtt4ha_alarmpanel_comms_test",
                 value_template: '{{ value_json.status }}',
                 icon: "mdi:check-network",
+                platform: "sensor",
                 force_update: true
             },
             {
@@ -100,7 +103,8 @@ export class Publisher {
                 type: "sensor",
                 unique_id: "sia2mqtt4ha_alarmpanel_event",
                 value_template: '{{ value_json.code }}',
-                icon: "mdi:flag"//,
+                icon: "mdi:flag",
+                platform: "sensor"//,
                 //entity_category: "diagnostic"
             }
         ]
@@ -129,7 +133,8 @@ export class Publisher {
                 value_template: `{{ value_json.${template} }}`,
                 device_class: device_class,
                 payload_off: false,
-                payload_on: true
+                payload_on: true,
+                platform: "binary_sensor"
             }
 
             zoneEntities.push(zoneEntity)
@@ -147,7 +152,8 @@ export class Publisher {
                 value_template: '{{ value_json.state }}',
                 payload_off: false,
                 payload_on: true,
-                icon: "mdi:security"
+                icon: "mdi:security",
+                platform: "binary_sensor"
             },
             { // Entity representing part armed state (true, false)
                 availability: availability,
@@ -160,7 +166,8 @@ export class Publisher {
                 value_template: '{{ value_json.part }}',
                 payload_off: false,
                 payload_on: true,
-                icon: "mdi:security"
+                icon: "mdi:security",
+                platform: "binary_sensor"
             },
             { // Entity representing alarm sounding state (true, false)
                 availability: availability,
@@ -173,7 +180,8 @@ export class Publisher {
                 value_template: '{{ value_json.state }}',
                 payload_off: false,
                 payload_on: true,
-                icon: "mdi:bell"
+                icon: "mdi:bell",
+                platform: "binary_sensor"
             }
         ]
 
