@@ -54,7 +54,6 @@ export class Publisher {
         // These are the standard entities: set_status, alarm_status, comms_test and event
         // all which will appear in HA under $baseTopic and will have JSON formatted messages
         // published to them.
-        // Todo: simplify this a bit - there's lots of duplication
         let statusEntities = [
             {
                 availability: availability,
@@ -78,8 +77,7 @@ export class Publisher {
                 unique_id: "sia2mqtt4ha_alarmpanel_last_event",
                 value_template: '{{ value_json.status }}',
                 icon: "mdi:bell",
-                platform: "sensor",
-                entity_category: "diagnostic"
+                platform: "sensor"
             },
             {
                 availability: availability,
@@ -153,7 +151,8 @@ export class Publisher {
                 payload_off: false,
                 payload_on: true,
                 icon: "mdi:security",
-                platform: "binary_sensor"
+                platform: "binary_sensor",
+                entity_category: "diagnostic"
             },
             { // Entity representing part armed state (true, false)
                 availability: availability,
@@ -167,7 +166,8 @@ export class Publisher {
                 payload_off: false,
                 payload_on: true,
                 icon: "mdi:security",
-                platform: "binary_sensor"
+                platform: "binary_sensor",
+                entity_category: "diagnostic"
             },
             { // Entity representing alarm sounding state (true, false)
                 availability: availability,
@@ -181,7 +181,8 @@ export class Publisher {
                 payload_off: false,
                 payload_on: true,
                 icon: "mdi:bell",
-                platform: "binary_sensor"
+                platform: "binary_sensor",
+                entity_category: "diagnostic"
             }
         ]
 
