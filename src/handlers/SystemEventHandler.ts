@@ -151,6 +151,8 @@ function parseSystemEvent(event: Event): ParsedEvent {
         default:
             parsedEvent.text = "Unknown Event"
     }
+
+    return parsedEvent
 }
 
 export async function handleSystemEvent(rawEvent: Event, publisher: Publisher): Promise<any> {
