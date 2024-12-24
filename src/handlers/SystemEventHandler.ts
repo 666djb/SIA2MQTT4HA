@@ -158,7 +158,7 @@ export async function handleSystemEvent(rawEvent: Event, publisher: Publisher): 
     console.log(`event is: ${event}`)
 
     // If an event has triggered the alarm
-    if(event.alarmState===true){
+    if(event.alarmState && event.alarmState == true){
         await publisher.publishJSON(subTopics.TRIGGERED, { state: true })
     }
 
