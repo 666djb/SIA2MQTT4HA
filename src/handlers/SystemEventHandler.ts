@@ -72,26 +72,28 @@ function parseSystemEvent(event: Event): ParsedEvent {
             parsedEvent.text = "Alarm Triggered"
             parsedEvent.alarmState = true
             break
-        // Sensor trouble
+        // Sensor fault events
         case "BT":
             parsedEvent.text = "Sensor Fault"
             break
-        // Sensor restore
         case "BJ":
             parsedEvent.text = "Sensor Restored"
             break
+        // Mains fault events
         case "AT":
             parsedEvent.text = "Mains Fault"
             break
         case "AR":
             parsedEvent.text = "Mains Restored"
             break
+        // Battery fault events
         case "YT":
             parsedEvent.text = "Battery Fault"
             break
         case "YR":
             parsedEvent.text = "Battery Restored"
             break
+        // Fire alarm events
         case "FA":
             parsedEvent.text = "Fire Alarm Triggered"
             parsedEvent.alarmState = true
@@ -100,7 +102,7 @@ function parseSystemEvent(event: Event): ParsedEvent {
             parsedEvent.text = "Fire Alarm Confirmed"
             parsedEvent.alarmState = true
             break
-        // Comms events
+        // Comms fault events
         case "LT":
         case "YC":
             parsedEvent.text = "Comms Fault"
@@ -126,9 +128,11 @@ function parseSystemEvent(event: Event): ParsedEvent {
             parsedEvent.setState = setState.UNSET
             parsedEvent.alarmState = false
             break
+        // Tamper fault events
         case "TA":
             parsedEvent.text = "Tamper Fault"
             break
+        // Comms test events
         case "RX":
             parsedEvent.text = "Manual Comms Test"
             parsedEvent.commsState = true
@@ -137,16 +141,21 @@ function parseSystemEvent(event: Event): ParsedEvent {
             parsedEvent.text = "Automatic Comms Test"
             parsedEvent.commsState = true
             break
+        // Engineer events
         case "LB":
             parsedEvent.text = "Engineer Access"
             break
         case "LX":
             parsedEvent.text = "Engineer Exit"
             break
+        // Remote (e.g. RSS) events
+        case "RS":
+            parsedEvent.text = "Remote Access"
+            break
+        // Ignore these events
         case "BR":
         case "CR":
-            // Ignore these events
-            return
+            return undefined
         default:
             parsedEvent.text = "Unknown Event"
     }
@@ -155,13 +164,17 @@ function parseSystemEvent(event: Event): ParsedEvent {
 
 export async function handleSystemEvent(rawEvent: Event, publisher: Publisher): Promise<any> {
     let event=parseSystemEvent(rawEvent)
+
+    // Ignore ignored events
+    if(event==undefined){
+        return
+    }
     
     // If an event has triggered the alarm
     if(event.alarmState){
         await publisher.publishJSON(subTopics.TRIGGERED, {
             state: event.alarmState,
-            time: event.time,
-
+            time: event.time
         })
     }
 
@@ -174,19 +187,6 @@ export async function handleSystemEvent(rawEvent: Event, publisher: Publisher): 
                 fullSet: event.setState == setState.FULL,
                 partSet: event.setState == setState.PART
             })
-        // switch(event.setState){ // Set the extended value based topic
-        //     case setState.UNSET:
-        //         await publisher.publishJSON(subTopics.ARMED, { state: false })
-        //         break
-        //     case setState.FULL:
-        //         await publisher.publishJSON(subTopics.ARMED, { state: true, part: false })
-        //         break
-        //     case setState.PART:
-        //         await publisher.publishJSON(subTopics.ARMED, { state: true, part: true })
-        //         break
-        //     default:
-        //         console.log(`${Date().toLocaleString()} Logic Error event.setState in handleSystemEvent()}`)
-        // } 
     }
 
     // If an event is comms related
@@ -200,12 +200,35 @@ export async function handleSystemEvent(rawEvent: Event, publisher: Publisher): 
     }
 
     // Publish each event to the last event topic
-    await publisher.publishJSON(subTopics.LASTEVENT, { status: event.text })
+    await publisher.publishJSON(subTopics.LASTEVENT,
+        {
+            status: event.text,
+            time: event.time
+        })
 }
 
 export async function sendInitialSystemEventState(publisher: Publisher): Promise<any> {
-    await publisher.publishJSON(subTopics.LASTEVENT, { status: "Waiting" })
-    await publisher.publishJSON(subTopics.COMMS, { status: "Waiting" })
-    await publisher.publishJSON(subTopics.SET, { status: "Waiting" })
-    await publisher.publishJSON(subTopics.TRIGGERED, { state: false })
+    await publisher.publishJSON(subTopics.LASTEVENT,
+        {
+            status: "Waiting",
+            time: "00:00"
+        })
+    await publisher.publishJSON(subTopics.COMMS,
+        {
+            status: "Waiting",
+            time: "00:00",
+            ok: true
+        })
+    await publisher.publishJSON(subTopics.SET,
+        {
+            status: "Waiting",
+            time: "00:00",
+            fullSet: false,
+            partSet: false
+        })
+    await publisher.publishJSON(subTopics.TRIGGERED,
+        {
+            state: false,
+            time: "00:00"
+        })
 }
