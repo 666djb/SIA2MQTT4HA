@@ -11,8 +11,8 @@ enum subTopics {
 
 enum setState {
     UNSET = "Unset",
-    FULL = "Full",
-    PART = "Part"
+    FULL = "Full Set",
+    PART = "Part Set"
 }
 
 interface ParsedEvent {
@@ -61,7 +61,7 @@ function parseSystemEvent(event: Event): ParsedEvent {
             break
         // Triggered events
         case "BV":
-            parsedEvent.text = "Confirmed Alarm"
+            parsedEvent.text = "Alarm Confirmed"
             parsedEvent.alarmState = true
             break
         // Intruder alarm events
