@@ -55,7 +55,7 @@ export class Publisher {
         // all which will appear in HA under $baseTopic and will have JSON formatted messages
         // published to them.
         let statusEntities = [
-            {
+            { // Entity representing the alarm unset/full set/part set status
                 availability: availability,
                 device: device,
                 state_topic: `${this.config.baseTopic}/set_status`,
@@ -67,7 +67,7 @@ export class Publisher {
                 icon: "mdi:security",
                 platform: "sensor"
             },
-            {
+            { // Entity representing the description of the last event
                 availability: availability,
                 device: device,
                 state_topic: `${this.config.baseTopic}/last_event`,
@@ -79,7 +79,7 @@ export class Publisher {
                 icon: "mdi:comment",
                 platform: "sensor"
             },
-            {
+            { // Entity representing SIA communications state
                 availability: availability,
                 device: device,
                 state_topic: `${this.config.baseTopic}/comms_test`,
@@ -89,8 +89,8 @@ export class Publisher {
                 unique_id: "sia2mqtt4ha_alarmpanel_comms_test",
                 value_template: '{{ value_json.status }}',
                 icon: "mdi:check-network",
-                platform: "sensor"//,
-                //force_update: true
+                platform: "sensor",
+                force_update: true
             },
             { // Entity representing alarm sounding state (true, false)
                 availability: availability,
@@ -106,7 +106,7 @@ export class Publisher {
                 icon: "mdi:bell",
                 platform: "binary_sensor"
             },
-            {
+            { // Entity representing raw SIA event codes
                 availability: availability,
                 device: device,
                 state_topic: `${this.config.baseTopic}/event`,

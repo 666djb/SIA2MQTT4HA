@@ -184,6 +184,7 @@ export async function handleSystemEvent(rawEvent: Event, publisher: Publisher): 
             {
                 status: event.setState,
                 time: event.time,
+                unSet: event.setState == setState.UNSET,
                 fullSet: event.setState == setState.FULL,
                 partSet: event.setState == setState.PART
             })
