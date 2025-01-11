@@ -1,6 +1,6 @@
 {
   "name": "sia2mqtt4ha",
-  "version": "0.1.27n",
+  "version": "0.1.27o",
   "description": "",
   "main": "./dist/server.js",
   "scripts": {
