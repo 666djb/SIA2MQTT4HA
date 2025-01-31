@@ -102,6 +102,9 @@ function parseSystemEvent(event: Event): ParsedEvent {
             parsedEvent.text = "Fire Alarm Confirmed"
             parsedEvent.alarmState = true
             break
+        case "FR":
+            parsedEvent.text = "Fire Alarm Restored"
+            // Don't publish an alarmState
         // Comms fault events
         case "LT":
         case "YC":
@@ -163,15 +166,15 @@ function parseSystemEvent(event: Event): ParsedEvent {
 }
 
 export async function handleSystemEvent(rawEvent: Event, publisher: Publisher): Promise<any> {
-    let event=parseSystemEvent(rawEvent)
+    let event = parseSystemEvent(rawEvent)
 
     // Ignore ignored events
-    if(event==undefined){
+    if (event == undefined) {
         return
     }
-    
+
     // If an event has triggered the alarm
-    if(event.alarmState){
+    if (event.alarmState) {
         await publisher.publishJSON(subTopics.TRIGGERED, {
             state: event.alarmState,
             time: event.time
@@ -179,7 +182,8 @@ export async function handleSystemEvent(rawEvent: Event, publisher: Publisher): 
     }
 
     // If an event has set or unset the alarm
-    if(event.setState){
+    // Publish the SET and TRIGGERED states
+    if (event.setState) {
         await publisher.publishJSON(subTopics.SET,
             {
                 status: event.setState,
@@ -188,10 +192,14 @@ export async function handleSystemEvent(rawEvent: Event, publisher: Publisher): 
                 fullSet: event.setState == setState.FULL,
                 partSet: event.setState == setState.PART
             })
+        await publisher.publishJSON(subTopics.TRIGGERED, {
+            state: event.alarmState,
+            time: event.time
+        })
     }
 
     // If an event is comms related
-    if(event.commsState){
+    if (event.commsState) {
         await publisher.publishJSON(subTopics.COMMS,
             {
                 status: event.commsState == true ? "Ok" : "Failed",
