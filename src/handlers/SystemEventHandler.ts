@@ -217,24 +217,24 @@ export async function handleSystemEvent(rawEvent: Event, publisher: Publisher): 
 }
 
 export async function sendInitialSystemEventState(publisher: Publisher): Promise<any> {
-    await publisher.publishJSON(subTopics.LASTEVENT,
-        {
-            status: "Waiting",
-            time: "00:00"
-        })
+    // await publisher.publishJSON(subTopics.LASTEVENT,
+    //     {
+    //         status: "Waiting",
+    //         time: "00:00"
+    //     })
     await publisher.publishJSON(subTopics.COMMS,
         {
             status: "Waiting",
             time: "00:00",
             ok: true
         })
-    await publisher.publishJSON(subTopics.SET,
-        {
-            status: "Waiting",
-            time: "00:00",
-            fullSet: false,
-            partSet: false
-        })
+    // await publisher.publishJSON(subTopics.SET,
+    //     {
+    //         status: "Waiting",
+    //         time: "00:00",
+    //         fullSet: false,
+    //         partSet: false
+    //     })
     await publisher.publishJSON(subTopics.TRIGGERED,
         {
             state: false,
