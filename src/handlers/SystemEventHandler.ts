@@ -137,11 +137,11 @@ function parseSystemEvent(event: Event): ParsedEvent {
             break
         // Comms test events
         case "RX":
-            parsedEvent.text = "Manual Comms Test"
+            parsedEvent.text = "Manual Test"
             parsedEvent.commsState = true
             break
         case "RP":
-            parsedEvent.text = "Automatic Comms Test"
+            parsedEvent.text = "Automatic Test"
             parsedEvent.commsState = true
             break
         // Engineer events
