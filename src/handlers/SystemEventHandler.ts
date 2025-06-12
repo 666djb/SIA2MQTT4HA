@@ -105,6 +105,7 @@ function parseSystemEvent(event: Event): ParsedEvent {
         case "FR":
             parsedEvent.text = "Fire Alarm Restored"
             // Don't publish an alarmState
+            break
         // Comms fault events
         case "LT":
         case "YC":
