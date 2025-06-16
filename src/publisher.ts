@@ -48,7 +48,7 @@ export class Publisher {
             name: "AlarmPanel",
             manufacturer: "SIA2MQTT4HA",
             model: "SIA2MQTT4HA App",
-            sw_version: "0.1"
+            sw_version: "0.2"
         }
 
         // These are the standard entities: set_status, alarm_status, comms_test and event

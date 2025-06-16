@@ -23,3 +23,11 @@
 ## 0.1.25 - 0.1.26
 
 - Fixed Part Armed entity to report correct state
+
+## 0.1.26 - 0.1.27
+
+- Changes to entities under test
+
+## 0.1.27 - 0.2.0
+
+- First release of update with new entities/attributes and updated [README](./README.md), [Getting Started Guide](./GettingStarted.md) and [Entity Examples](./EntityExamples.md)
