@@ -112,20 +112,18 @@ These sensor entities can be shown in a Lovelace dashboard and used in Automatio
 
 ## Configure Alarm Panel
 
-You now need to configure your Honeywell Alarm panel to send SIA messages to the add-on in
-Home Assistant. This is done by first adding an ARC Receiver and configuring the panel to
-send messages to it:
+You now need to configure your Honeywell Alarm panel to send SIA messages to SIA2MQTT4HA. From your Alarm's keypad, enter Engineer Mode then follow each of these steps:
 
-* Menu 56.1.1.1.4.1 - here you enter the IP address and port number of the Home
-Assistant add-on (e.g. 192.168.0.106 and 10002)
-* Menu 56.1.1.1.4.2 select SIA as the Format
-* Menu 56.1.1.1.4.2.1 select SIA level 3
-* Menu 56.1.1.1.4.3.1 specify your Autotest Interval (e.g. 01:00 for once per hour)
-* Menu 56.1.1.1.4.3.2 specify an Account Number (any numeric value)
-* Menu 56.1.2.1 and submenus specify the same Account Number, the triggers to report
-to the add-on and “1” for the RX Sequence to report these triggers to SIA2MQTT4HA.
-Triggers include e.g. INTRUDER, FIRE, SETTING, PA/DISTRESS, FAULT etc.
+1. In menu 56.1.1.1.4.1 enter the IP addresss of Home Assistant and the port number for the SIA2MQTT4HA add-on which is 10002 by default
+2. In menu 56.1.1.1.4.2 select SIA as the Format
+3. In menu 56.1.1.1.4.2.1 select SIA level 3
+4. In menu 56.1.1.1.4.3.1 enter your Autotest Interval (e.g. 01:00 for once per hour)
+5. In menu 56.1.1.1.4.3.2 enter an Account Number (any numeric value)
+6. In menu 56.1.2.1.1 enter the same Account Number (as in step 5)
+7. In menu 56.1.2.1.2 enable the events to report (e.g. INTRUDER, FIRE, SETTING, PA/DISTRESS, FAULT etc.)
+8. In menu 56.1.2.1.3 enter 1 for the RX sequence
+9. In menu 56.3.3.5.1 disable encyption for Reports
 
 When the Alarm Panel is configured correctly, it will send messages to the add-on in response
 to triggers and the sensor entities will update in response. You can test this by
-setting/unsetting the alarm for example.
+setting/unsetting the alarm for example, or by entering menu 56.7.1 to run a manual test.

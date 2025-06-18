@@ -10,7 +10,7 @@ export class SIABlock {
     constructor(public funcCode: FunctionCodes, public data: string) {
     }
 
-    toBuffer() {
+    toBuffer(): Buffer {
         const dataLength = this.data.length
         const bufferLength = dataLength + PACKING_LENGTH
         const checkLength = dataLength + CHECK_OFFSET
@@ -33,16 +33,20 @@ export class SIABlock {
         return buffer
     }
 
-    static fromBuffer(buffer: Buffer) {
+    static fromBuffer(buffer: Buffer): SIABlock {
 
-        const dataLength = this.checkParity(buffer)
-        const funcCode = buffer[1]
-        const data = buffer.toString('utf8', HEADER_LENGTH, HEADER_LENGTH + dataLength)
+        try {
+            const dataLength = this.checkParity(buffer)
+            const funcCode = buffer[1]
+            const data = buffer.toString('utf8', HEADER_LENGTH, HEADER_LENGTH + dataLength)
 
-        return new SIABlock(funcCode, data)
+            return new SIABlock(funcCode, data)
+        } catch (error) {
+            throw error
+        }
     }
 
-    static checkParity(buffer: Buffer) {
+    static checkParity(buffer: Buffer): number {
 
         let dataLength = buffer[0] - CHECK_OFFSET
         let parity = BASE_PARITY
@@ -53,7 +57,7 @@ export class SIABlock {
         }
 
         if (parity != 0) {
-            throw "Parity Error"
+            throw new Error("Parity Error")
         }
 
         return dataLength

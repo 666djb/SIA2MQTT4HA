@@ -31,3 +31,8 @@
 ## 0.1.27 - 0.2.0
 
 - First release of update with new entities/attributes and updated [README](./README.md), [Getting Started Guide](./GettingStarted.md) and [Entity Examples](./EntityExamples.md)
+
+## 0.2.1
+
+- Updated Getting Started Guide with instructions to disable SIA Reporting encryption in alarm panel as SIA2MQTT4HA doesn't current support encrypted comms.
+- Added error handling if messages that cannot be parsed (e.g. due to encryption) are received.

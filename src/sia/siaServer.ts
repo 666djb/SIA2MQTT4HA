@@ -29,14 +29,22 @@ export class SIAServer extends events.EventEmitter {
         let accountId = ""
         let event = new Event()
 
+
         const handleData = function (data: Buffer) {
             // Break down the received data in to a block with funcCode and data properties
-            const block = SIABlock.fromBuffer(data)
+            let block
 
-            // Debugging:
-            //console.log("block funcCode:",block.funcCode.toString(16))
-            //console.log("block (ascii):",block.data)
-
+            try{
+                block=SIABlock.fromBuffer(data)
+            }catch(error){
+                if (error instanceof Error) {
+                    console.log(`${Date().toLocaleString()} Error parsing received data: ${error.message}. Closing connection. Check Reporting encryption is disabled on panel.`)
+                }else{
+                    console.log(`${Date().toLocaleString()} Unknown error parsing received data ${error}. Closing connection. Check Reporting encryption is disabled on panel.`)
+                }
+                return
+            }
+            
             // The function code will decide what we do next
             // We expect to receive the following sequence of funcCodes on each connection from the alarm panel:
             // account_id, new_event_data, ascii for each message
